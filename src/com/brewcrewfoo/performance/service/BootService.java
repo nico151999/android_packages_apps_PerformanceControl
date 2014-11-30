@@ -27,15 +27,17 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
+import com.brewcrewfoo.performance.fragments.Gpu;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Voltage;
-import com.brewcrewfoo.performance.fragments.Wakelocks;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public class BootService extends Service implements Constants {
@@ -73,8 +75,6 @@ public class BootService extends Service implements Constants {
             // clear saved offsets - they make no sense after a reboot
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(PREF_OFFSETS, "").commit();
-
-            Wakelocks.clearKernelWakelockStatus(c);
 
             final StringBuilder sb = new StringBuilder();
             final String FASTCHARGE_PATH = Helpers.fastcharge_path();
@@ -114,6 +114,74 @@ public class BootService extends Service implements Constants {
                                 .append(aIO_SCHEDULER_PATH).append(";\n");
                 }
             }
+		//GPU vpll, default is 0
+            if (!preferences.getBoolean(Gpu.GPU_VPLL_PREF, false)) {
+                sb.append("busybox echo 0").append(" > ").append(Gpu.MALI_VPLL_FILE).append(";\n");
+            }
+	    else {
+                sb.append("busybox echo 1").append(" > ").append(Gpu.MALI_VPLL_FILE).append(";\n");
+            }
+            if (preferences.getBoolean(Gpu.SOB_PREF, false)) {
+		// GPU setup
+		String minFrequency = preferences.getString(Gpu.FREQ_MIN_PREF, null);
+		String maxFrequency = preferences.getString(Gpu.FREQ_MAX_PREF, null);
+		String minFreqVolt = preferences.getString(Gpu.MIN_FREQ_VOLT_PREF, null);
+		String maxFreqVolt = preferences.getString(Gpu.MAX_FREQ_VOLT_PREF, null);
+		String currentFrequencies[] = Helpers.readOneLine(Gpu.CUR_FREQ_FILE).split(" ");
+		String currentVoltages[] = Helpers.readOneLine(Gpu.CUR_VOLT_FILE).split(" ");
+		String availableFrequenciesLine[] = c.getResources().getStringArray(R.array.gpu_max_freq_values);
+		String availableVoltagesLine[] = c.getResources().getStringArray(R.array.gpu_max_voltage_values);
+		boolean noFreqSettings = ((availableFrequenciesLine == null) ||
+		                     (minFrequency == null) && (maxFrequency == null));
+		boolean noVoltSettings = ((availableVoltagesLine == null) ||
+		                     (minFreqVolt == null) && (maxFreqVolt == null));
+
+		List<String> voltages = null;
+		if (noVoltSettings) {
+		    Log.d(TAG, "No GPU voltage settings saved. Nothing to restore.");
+		} else {
+		    voltages = Arrays.asList(availableVoltagesLine);
+		    if (voltages != null && voltages.contains(maxFreqVolt)) {
+			currentVoltages[1] = maxFreqVolt;
+		    }
+		    availableVoltagesLine = c.getResources().getStringArray(R.array.gpu_min_voltage_values);
+		    if (availableVoltagesLine != null){
+			voltages = Arrays.asList(availableVoltagesLine);
+		    } else {
+			voltages = null;
+		    }
+		    if (voltages != null && voltages.contains(minFreqVolt)) {
+			currentVoltages[0] = minFreqVolt;
+		    }
+                    sb.append("busybox echo ").append(currentVoltages[0])
+                            .append(" ").append(currentVoltages[1])
+                            .append(" > ").append(Gpu.CUR_VOLT_FILE).append(";\n");
+		    Log.d(TAG, "GPU voltage settings restored.");
+		}
+
+		List<String> frequencies = null;
+		if (noFreqSettings) {
+		    Log.d(TAG, "No GPU clock settings saved. Nothing to restore.");
+		} else {
+		    frequencies = Arrays.asList(availableFrequenciesLine);
+		    if (frequencies != null && frequencies.contains(maxFrequency)) {
+			currentFrequencies[1] = maxFrequency;
+		    }
+		    availableFrequenciesLine = c.getResources().getStringArray(R.array.gpu_min_freq_values);
+		    if (availableFrequenciesLine != null){
+			frequencies = Arrays.asList(availableFrequenciesLine);
+		    } else {
+			frequencies = null;
+		    }
+		    if (frequencies != null && frequencies.contains(minFrequency)) {
+			currentFrequencies[0] = minFrequency;
+		    }
+                    sb.append("busybox echo ").append(currentFrequencies[0])
+                            .append(" ").append(currentFrequencies[1])
+                            .append(" > ").append(Gpu.CUR_FREQ_FILE).append(";\n");
+		    Log.d(TAG, "GPU clock settings restored.");
+		}
+	    }
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
                 if (Helpers.voltageFileExists()) {
                     final List<Voltage> volts = VoltageControlSettings.getVolts(preferences);

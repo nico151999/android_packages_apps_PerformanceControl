@@ -29,15 +29,17 @@ public interface Constants {
 
     // Fragment IDs
     public static final int FRAGMENT_ID_CPUSETTINGS = 0;
-    public static final int FRAGMENT_ID_BATTERYINFO = 1;
-    public static final int FRAGMENT_ID_OOMSETTINGS = 2;
-    public static final int FRAGMENT_ID_ADVANCED = 3;
-    public static final int FRAGMENT_ID_TIMEINSTATE = 4;
-    public static final int FRAGMENT_ID_WAKELOCKS = 5;
-    public static final int FRAGMENT_ID_CPUINFO = 6;
-    public static final int FRAGMENT_ID_DISKINFO = 7;
-    public static final int FRAGMENT_ID_VOLTAGECONROL = 8;
-    
+    public static final int FRAGMENT_ID_GPUSETTINGS = 1;
+    public static final int FRAGMENT_ID_BATTERYINFO = 2;
+    public static final int FRAGMENT_ID_OOMSETTINGS = 3;
+    public static final int FRAGMENT_ID_VM = 4;
+    public static final int FRAGMENT_ID_VOLTAGECONROL = 5;
+    public static final int FRAGMENT_ID_ADVANCED = 6;
+    public static final int FRAGMENT_ID_TIMEINSTATE = 7;
+    public static final int FRAGMENT_ID_CPUINFO = 8;
+    public static final int FRAGMENT_ID_DISKINFO = 9;
+    public static final int FRAGMENT_ID_TOOLS = 10;
+
     // CPU settings
     public static final String CPU_PATH = "/sys/devices/system/cpu/cpu";
     public static final String CPU_FREQ_TAIL = "/cpufreq/scaling_cur_freq";
@@ -75,7 +77,6 @@ public interface Constants {
     public static final String PREF_OFFSETS = "pref_offsets";
     public static final String TIME_IN_STATE_OVERALL_PATH = "/sys/devices/system/cpu/cpufreq/overall_stats/overall_time_in_state";
     public static final String PREF_STATE_MODE = "pref_state_mode";
-    public static final String PREF_CORE_MODE = "pref_core_mode";
 
     // Battery
     public static final String BAT_VOLT_PATH = "/sys/class/power_supply/battery/voltage_now";
@@ -226,6 +227,7 @@ public interface Constants {
     public static final String PREF_USE_LIGHT_THEME = "use_light_theme";
     public static final String PREF_WIDGET_BG_COLOR = "widget_bg_color";
     public static final String PREF_WIDGET_TEXT_COLOR = "widget_text_color";
+
 }
 
 

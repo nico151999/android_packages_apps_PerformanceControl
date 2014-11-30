@@ -9,8 +9,9 @@
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -18,42 +19,63 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme_Dark">
-        <activity android:name=".activities.MainActivity">
+        <activity android:name="com.brewcrewfoo.performance.activities.MainActivity"
+	    android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name="com.brewcrewfoo.performance.activities.PCSettings" />
-        <activity android:name="com.brewcrewfoo.performance.activities.PackActivity" />
-        <activity android:name="com.brewcrewfoo.performance.activities.FlasherActivity" />
-        <activity
-            android:name="com.brewcrewfoo.performance.activities.FileChooser"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name="com.brewcrewfoo.performance.activities.ResidualsActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name="com.brewcrewfoo.performance.activities.iResidualsActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="com.brewcrewfoo.performance.activities.KSMActivity" />
-        <activity
-            android:name="com.brewcrewfoo.performance.activities.FreezerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="com.brewcrewfoo.performance.activities.GovSetActivity" />
-
+        <activity android:name="com.brewcrewfoo.performance.activities.MemUsageActivity"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.PCSettings"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.PackActivity"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.FlasherActivity"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.FileChooser"
+                  android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.HideTabs"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.TouchScreenSettings"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.KSMActivity"
+                  android:windowSoftInputMode="stateHidden"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.ZramActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.PFKActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.FreezerActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.ParamActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.GovSetActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.IOSetActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.VMSettings"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.BuildPropEditor"
+                  android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.ResidualsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.iResidualsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name="com.brewcrewfoo.performance.activities.SysctlEditor"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <receiver android:name="com.brewcrewfoo.performance.service.BootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="com.brewcrewfoo.performance.service.PowerConnectionReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
-                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
-            </intent-filter>
-        </receiver>
+
+	<receiver
+	    android:name="com.brewcrewfoo.performance.widget.PCWidget"
+	    android:label="Performance Control">
+	    <intent-filter>
+		<action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+		<action android:name="com.brewcrewfoo.performance.ACTION_FREQS_CHANGED"/>
+	    </intent-filter>
+	    <meta-data
+		android:name="android.appwidget.provider"
+		android:resource="@xml/widget_info"/>
+	</receiver>
 
         <service android:name="com.brewcrewfoo.performance.service.BootService" />
 
