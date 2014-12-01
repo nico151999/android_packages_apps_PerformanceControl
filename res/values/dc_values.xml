@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+Performance Control - An Android CPU Control application
+Copyright (C) 2012  James Roberts
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+    <!-- String -->
+    <string name="zram_size">80850944</string>
+    <string name="zram_size_k">78956</string>
+
+    <string name="t_gpu_settings">GPU SETTINGS</string>
+
+    <!-- Performance Settings : GPU settings title -->
+    <string name="gpu_title">GPU</string>
+    <!-- Performance Settings : GPU settings sub items -->
+    <string name="gpu_vpll_title">Mali Use VPLL Clock</string>
+    <string name="gpu_vpll_summary">If VPLL is off, frequency may not be the exact value.</string>
+    <string name="gpu_min_freq_title">Minimum GPU frequency</string>
+    <string name="gpu_min_freq_summary" translatable="false">%s</string>
+    <string name="gpu_min_freq_volt_title">GPU minimum frequency voltage</string>
+    <string name="gpu_min_freq_volt_summary" translatable="false">%s</string>
+    <string name="gpu_max_freq_title">Maximum GPU frequency</string>
+    <string name="gpu_max_freq_summary" translatable="false">%s</string>
+    <string name="gpu_max_freq_volt_title">GPU maximum frequency voltage</string>
+    <string name="gpu_max_freq_volt_summary" translatable="false">%s</string>
+
+    <!-- Performance Settings : Set on boot option -->
+    <string name="performance_set_on_boot">Set on boot</string>
+    <string name="performance_set_on_boot_summary">Restore applied settings on boot</string>
+
+    <string name="volt_875_mv">875 mV</string>
+    <string name="volt_900_mv">900 mV</string>
+    <string name="volt_925_mv">925 mV</string>
+    <string name="volt_950_mv">950 mV</string>
+    <string name="volt_975_mv">975 mV</string>
+    <string name="volt_1000_mv">1000 mV</string>
+    <string name="volt_1025_mv">1025 mV</string>
+    <string name="volt_1050_mv">1050 mV</string>
+    <string name="volt_1075_mv">1075 mV</string>
+    <string name="volt_1100_mv">1100 mV</string>
+    <string name="volt_1125_mv">1125 mV</string>
+    <string name="volt_1150_mv">1150 mV</string>
+    <string name="volt_1175_mv">1175 mV</string>
+    <string name="volt_1200_mv">1200 mV</string>
+
+    <string name="freq_100_mhz">100 MHz</string>
+    <string name="freq_108_mhz">108 MHz</string>
+    <string name="freq_160_mhz">160 MHz</string>
+    <string name="freq_267_mhz">267 MHz</string>
+    <string name="freq_330_mhz">330 MHz</string>
+    <string name="freq_400_mhz">400 MHz</string>
+    <string name="freq_440_mhz">440 MHz</string>
+
+    <string-array name="gpu_min_voltage" translatable="false">
+        <item>@string/volt_875_mv</item>
+        <item>@string/volt_900_mv</item>
+        <item>@string/volt_925_mv</item>
+        <item>@string/volt_950_mv</item>
+        <item>@string/volt_975_mv</item>
+        <item>@string/volt_1000_mv</item>
+    </string-array>
+    <string-array name="gpu_min_voltage_values" translatable="false">
+        <item>875000</item>
+        <item>900000</item>
+        <item>925000</item>
+        <item>950000</item>
+        <item>975000</item>
+        <item>1000000</item>
+    </string-array>
+
+    <string-array name="gpu_min_freq" translatable="false">
+        <item>@string/freq_108_mhz</item>
+        <item>@string/freq_160_mhz</item>
+    </string-array>
+    <string-array name="gpu_min_freq_values" translatable="false">
+        <item>108</item>
+        <item>160</item>
+    </string-array>
+
+    <string-array name="gpu_max_voltage" translatable="false">
+        <item>@string/volt_1025_mv</item>
+        <item>@string/volt_1050_mv</item>
+        <item>@string/volt_1075_mv</item>
+        <item>@string/volt_1100_mv</item>
+        <item>@string/volt_1125_mv</item>
+        <item>@string/volt_1150_mv</item>
+        <item>@string/volt_1175_mv</item>
+        <item>@string/volt_1200_mv</item>
+    </string-array>
+    <string-array name="gpu_max_voltage_values" translatable="false">
+        <item>1025000</item>
+        <item>1050000</item>
+        <item>1075000</item>
+        <item>1100000</item>
+        <item>1125000</item>
+        <item>1150000</item>
+        <item>1175000</item>
+        <item>1200000</item>
+    </string-array>
+
+    <string-array name="gpu_max_freq" translatable="false">
+        <item>@string/freq_267_mhz</item>
+        <item>@string/freq_330_mhz</item>
+        <item>@string/freq_400_mhz</item>
+        <item>@string/freq_440_mhz</item>
+    </string-array>
+    <string-array name="gpu_max_freq_values" translatable="false">
+        <item>267</item>
+        <item>330</item>
+        <item>400</item>
+        <item>440</item>
+    </string-array>
+</resources>

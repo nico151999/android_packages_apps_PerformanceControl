@@ -23,6 +23,10 @@ Copyright (C) 2012  James Roberts
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="10dp" >
+    <TextView
+        android:id="@+id/ui_header_total_state_time"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:text="@string/total_state_time" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,37 +34,12 @@ Copyright (C) 2012  James Roberts
         android:paddingLeft="10dp"
         android:paddingRight="10dp" >
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/spinner_period_title" />
-        <Spinner
-            android:id="@+id/period_type_select"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp" >
-        <TextView
             android:id="@+id/ui_total_state_time"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-        <CheckBox
-            android:id="@+id/ui_core_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/state_core_mode" />
+            android:textSize="20sp" />
         <CheckBox
             android:id="@+id/ui_mode_switch"
             android:layout_width="wrap_content"
@@ -68,22 +47,18 @@ Copyright (C) 2012  James Roberts
             android:layout_gravity="center_vertical"
             android:text="@string/state_time_mode" />
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="#28ffffff" />
+    <TextView
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:text="@string/time_in_state" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp" >
+        android:paddingRight="10dp" >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
             <LinearLayout
                 android:id="@+id/ui_states_view"
@@ -100,17 +75,6 @@ Copyright (C) 2012  James Roberts
                 android:text="@string/no_states_file_found"
                 android:textSize="20sp"
                 android:visibility="gone" />
-            <LinearLayout
-                android:id="@+id/ui_progress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone" >
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

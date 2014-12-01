@@ -77,6 +77,10 @@ public class CPUSettings extends Fragment
     private CpuInfoListAdapter mCpuInfoListAdapter;
     private List<String> mCpuInfoListData;
     private LayoutInflater mInflater;
+    private String supported[] = {
+            "ondemand", "lulzactive", "lulzactiveW",
+            "interactive", "hyper", "conservative",
+            "smartmax"};
 
     public class CpuInfoListAdapter extends ArrayAdapter<String> {
 
@@ -127,7 +131,6 @@ public class CPUSettings extends Fragment
         lstViewParams.height = listHeigt;
 
         mIsTegra3 = new File(TEGRA_MAX_FREQ_PATH).exists();
-        mIsDynFreq = new File(DYN_MAX_FREQ_PATH).exists() && new File(DYN_MIN_FREQ_PATH).exists();
         mAvailableFrequencies = new String[0];
 
         String availableFrequenciesLine = Helpers.readOneLine(STEPS_PATH);
@@ -147,16 +150,18 @@ public class CPUSettings extends Fragment
 
         String mCurrentGovernor = Helpers.readOneLine(GOVERNOR_PATH);
         String mCurrentIo = Helpers.getIOScheduler();
-        String mCurMaxSpeed;
-        String mCurMinSpeed;
+        String mCurMaxSpeed = "-1";
+        String mCurMinSpeed = "-1" ;
         if (new File(DYN_MAX_FREQ_PATH).exists()) {
             mCurMaxSpeed = Helpers.readOneLine(DYN_MAX_FREQ_PATH);
-        } else {
-            mCurMaxSpeed = Helpers.readOneLine(MAX_FREQ_PATH);
         }
         if (new File(DYN_MIN_FREQ_PATH).exists()) {
             mCurMinSpeed = Helpers.readOneLine(DYN_MIN_FREQ_PATH);
-        } else {
+        } 
+        mIsDynFreq = (Integer.valueOf(mCurMaxSpeed) > 0) && (Integer.valueOf(mCurMinSpeed) > 0);
+	if (!mIsDynFreq)
+	{
+            mCurMaxSpeed = Helpers.readOneLine(MAX_FREQ_PATH);
             mCurMinSpeed = Helpers.readOneLine(MIN_FREQ_PATH);
         }
 
@@ -244,8 +249,6 @@ public class CPUSettings extends Fragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (!getResources().getBoolean(R.bool.config_showPerformanceOnly)) {
             inflater.inflate(R.menu.cpu_settings_menu, menu);
-        } else {
-            //inflater.inflate(R.menu.cpu_settings_menu_simple, menu);
         }
     }
 
@@ -257,9 +260,13 @@ public class CPUSettings extends Fragment
                 startActivity(intent);
                 break;
             case R.id.gov_settings:
-                intent = new Intent(context, GovSetActivity.class);
-                startActivity(intent);
-                break;
+                for (String aSupported : supported) {
+                    if (aSupported.equals(Helpers.readOneLine(GOVERNOR_PATH))) {
+                        intent = new Intent(context, GovSetActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                }
         }
         return true;
     }

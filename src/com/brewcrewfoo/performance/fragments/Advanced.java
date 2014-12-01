@@ -447,14 +447,14 @@ public class Advanced extends PreferenceFragment
         String cancel = res.getString(R.string.cancel);
         String ok = res.getString(R.string.ok);
         LayoutInflater factory = LayoutInflater.from(context);
-        final View alphaDialog = factory.inflate(R.layout.seekbar_dialog, null);
+        final View alphaDialog = factory.inflate(R.layout.seekbar_dialog_pc, null);
 
-        final SeekBar seekbar = (SeekBar) alphaDialog.findViewById(R.id.seek_bar);
+        final SeekBar seekbar = (SeekBar) alphaDialog.findViewById(R.id.seek_bar_pc);
 
         seekbar.setMax(max);
         seekbar.setProgress(currentProgress);
 
-        settingText = (EditText) alphaDialog.findViewById(R.id.setting_text);
+        settingText = (EditText) alphaDialog.findViewById(R.id.setting_text_pc);
         settingText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
