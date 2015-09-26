@@ -131,6 +131,7 @@ public class CPUSettings extends Fragment
         lstViewParams.height = listHeigt;
 
         mIsTegra3 = new File(TEGRA_MAX_FREQ_PATH).exists();
+	mIsDynFreq = new File(DYN_MAX_FREQ_PATH).exists() && new File(DYN_MIN_FREQ_PATH).exists();
         mAvailableFrequencies = new String[0];
 
         String availableFrequenciesLine = Helpers.readOneLine(STEPS_PATH);
@@ -158,8 +159,7 @@ public class CPUSettings extends Fragment
         if (new File(DYN_MIN_FREQ_PATH).exists()) {
             mCurMinSpeed = Helpers.readOneLine(DYN_MIN_FREQ_PATH);
         } 
-        mIsDynFreq = (Integer.valueOf(mCurMaxSpeed) > 0) && (Integer.valueOf(mCurMinSpeed) > 0);
-	if (!mIsDynFreq)
+        if ((Integer.valueOf(mCurMaxSpeed) < 0) || (Integer.valueOf(mCurMinSpeed) < 0))
 	{
             mCurMaxSpeed = Helpers.readOneLine(MAX_FREQ_PATH);
             mCurMinSpeed = Helpers.readOneLine(MIN_FREQ_PATH);
