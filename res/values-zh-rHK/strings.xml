@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+Performance Control - An Android CPU Control application
+Copyright (C) 2012  James Roberts
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+
+    <string name="app_name">性能控制</string>
+    <!-- Main tabs -->
+    <string name="tab_cpu_settings">CPU 速度</string>
+    <string name="tab_cpu_profiles">CPU 屬性</string>
+    <string name="tab_battery_info">電池</string>
+    <string name="tab_oom_settings">記憶體設定</string>
+    <string name="tab_time_in_state">狀態停留時間</string>
+    <string name="tab_voltage_settings">電壓設定</string>
+    <string name="tab_cpu_info">一般信息</string>
+    <string name="tab_disk_info">硬碟信息</string>
+    <string name="tab_tools">工具</string>
+    <!-- Titles -->
+    <string name="t_cpu_settings">CPU 速度</string>
+    <string name="t_battery_info">電池</string>
+    <string name="t_oom_settings">記憶體設定</string>
+    <string name="t_volt_settings">電壓設定</string>
+    <string name="t_adv_settings">"高級設定"</string>
+    <string name="t_time_in_state">"狀態停留時間"</string>
+    <string name="t_cpu_info">一般信息</string>
+    <string name="t_disk_info">硬碟信息</string>
+    <string name="t_tools">工具</string>
+
+    <string name="menu_tab">分頁</string>
+    <!-- Menu -->
+    <string name="mt_refresh">刷新</string>
+    <string name="mt_app_settings">"App 設定"</string>
+    <string name="mt_reset">重置</string>
+    <string name="mt_restore">恢復</string>
+    <string name="mt_plus25">每次增加 25 mV </string>
+    <string name="mt_minus25">每次減少 25 mV </string>
+    <!-- CPU settings -->
+    <string name="current_speed">當前速度</string>
+    <string name="current_max">最高速度: </string>
+    <string name="current_min">最低速度: </string>
+    <string name="governor">調節器</string>
+    <string name="io">I/O 調度</string>
+    <string name="sob">啟動時自動應用程序</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="cpu_info_list_header">CPU狀態</string>
+    <string name="cpu_speed_header">CPU速度</string>
+    <string name="other_settings_header">其他設定</string>
+    <string name="core_offline">離線</string>
+    <string name="core">內核</string>
+
+    <!-- Other settings -->
+    <string name="prefcat_free_memory">空閑記憶體</string>
+    <string name="prefcat_tweaks">快速充電</string>
+    <string name="prefcat_misc_short">其他</string>
+    <string name="prefcat_read_ahead">SD 預讀取</string>
+    <string name="prefcat_vm_settings">DALVIK 虛擬機設定</string>
+    <string name="dt_free_memory">Minfree 進程清理器</string>
+    <string name="dt_read_ahead">SD 預讀取</string>
+    <string name="pt_free_memory">空閑記憶體</string>
+    <string name="ps_free_memory">minfree 進程清理器會保持的記憶體數量 |
+        當前: %s
+    </string>
+    <string name="ps_free_memory_boot">在啟動時應用程序</string>
+    <string name="pt_read_ahead">存儲設備預讀</string>
+    <string name="ps_read_ahead">存儲設備預讀容量大小, 以 kb 為單位 |
+        當前: %s
+    </string>
+
+    <string name="ps_fast_charge_boot">快速充電</string>
+    <string name="fast_charge_warning">當快速充電開啟時, \n\n你將無法在重啟後，將手機連接到PC上，你 *僅* 能夠對你手機進行充電!
+    </string>
+    <string name="fast_charge_notification_title">快速充電已經打開!</string>
+    <string name="fast_charge_notification_message">手機處於快速充電模式!</string>
+
+    <!-- minfree -->
+    <string name="prefcat_oom">最小空閑記憶體</string>
+    <string name="title_foreground_app">前台應用程序</string>
+    <string name="title_visible_app">可見應用程序</string>
+    <string name="title_secondary_server">輔助服務</string>
+    <string name="title_hidden_app">隱藏應用程序</string>
+    <string name="title_content_providers">內容提供</string>
+    <string name="title_empty_app">空應用程序</string>
+    <string name="prefcat_oom_predefines">預先設定</string>
+    <string name="pt_oom">Minfree 任務清理器預先設定</string>
+
+    <string name="pt_verylight">非常輕度 (很少清理)</string>
+    <string name="pt_light">輕度</string>
+    <string name="pt_medium">中度</string>
+    <string name="pt_aggressive">主動</string>
+    <string name="pt_veryaggressive">非常主動 (經常清理)</string>
+
+    <!-- do not kill proc -->
+    <string name="prefcat_user_proc">不被清理的用戶進程</string>
+    <string name="prefcat_sys_proc">不被清理的系統進程</string>
+    <string name="pt_user_proc">啟用不被清理的用戶進程</string>
+    <string name="pt_sys_proc">啟用不被清理的系統進程</string>
+    <string name="pt_user_names_proc">用戶進程白名單</string>
+    <string name="pt_sys_names_proc">系統進程白名單</string>
+    <string name="ps_restore_boot">啟動時恢復以上設定</string>
+    <string name="ps_user_proc">用戶進程名稱列表 (逗號分隔)</string>
+    <string name="ps_sys_proc">系統進程名稱列表 (逗號分隔)</string>
+    <string name="no_proc">沒有包</string>
+    <!-- bln -->
+    <string name="prefcat_bln">背光通知</string>
+    <string name="pt_bln">背光通知</string>
+    <!-- blx -->
+    <string name="blx_info">電池壽命擴展特性\n作者: Ezekeel</string>
+    <string name="prefcat_blx">電池壽命擴展</string>
+    <string name="pt_blx_boot">啟動時應用程序</string>
+    <string name="ps_blx_boot">啟動時應用程序</string>
+    <string name="blx_title">充電限制:</string>
+    <!-- dsync -->
+    <string name="dsync_info">動態 FSync 特性\n作者: Paul Reioux (faux123)</string>
+    <string name="prefcat_dsync">動態 FSYNC</string>
+    <string name="ps_dsync">重啟後設定將被恢復</string>
+    <string name="pt_dsync">動態 Fsync</string>
+    <!-- bl_timeout -->
+    <string name="prefcat_bltimeout">背光超時</string>
+    <string name="ps_bltimeout">%s ms</string>
+    <string name="bltimeout_title">背光超時</string>
+    <!-- bl_touch -->
+    <string name="prefcat_bltouch">背光觸摸屏</string>
+    <string name="pt_bltouch">背光觸摸屏</string>
+    <!-- pfk -->
+    <string name="pfk_info">幻影按鍵過濾 模塊版本. %s\n作者: Cristoforo Cataldo (Christopher83)</string>
+    <string name="prefcat_pfk">幻影按鍵過濾</string>
+    <string name="pt_home_enabled">Home 鍵過濾器</string>
+    <string name="ps_home_enabled">已經忽略的按鍵: %s</string>
+    <string name="home_allowed_irq_title">最大允許中斷數</string>
+    <string name="home_report_wait_title">報告等待時間</string>
+
+    <string name="pt_menuback_enabled">菜單/返回 鍵過濾器</string>
+    <string name="ps_menuback_enabled">已經忽略的按鍵: %s</string>
+    <string name="menuback_interrupt_checks_title">中斷檢查</string>
+    <string name="menuback_first_err_wait_title">第一次出錯等待時間</string>
+    <string name="menuback_last_err_wait_title">最後一次出錯等待時間</string>
+    <string name="ps_pfk_set_on_boot">啟用後將在重啟後恢復所有 按鍵過濾器 設定</string>
+    <!-- dynamic write back -->
+    <string name="dynamic_writeback_info">動態臟頁面寫回特性\n作者: Cristoforo Cataldo (Christopher83)</string>
+    <string name="dynamic_write_back_title">動態臟頁面寫回</string>
+    <string name="pt_dynamic_write_back">動態臟頁面寫回</string>
+    <string name="dynamic_writeback_active_title">臟寫回激活</string>
+    <string name="dynamic_writeback_suspend_title">臟寫回暫停</string>
+    <!--  -->
+    <string name="size_25_mb">25mb</string>
+    <string name="size_50_mb">50mb</string>
+    <string name="size_75_mb">75mb</string>
+    <string name="size_80_mb">80mb</string>
+    <string name="size_100_mb">100mb</string>
+    <string name="size_128_kb">128kb</string>
+    <string name="size_256_kb">256kb</string>
+    <string name="size_512_kb">512kb</string>
+    <string name="size_1024_kb">1024kb</string>
+    <string name="size_2048_kb">2048kb</string>
+    <string name="size_4096_kb">4096kb</string>
+    <!-- Voltage control -->
+    <string name="volt_info">注意 !\n在啟動時設定之前激活, 確保已輸入的值沒有超過限制否則可能導致電話無法響應.</string>
+    <string name="ps_volt_mhz_voltage">" Hz"</string>
+    <string name="ps_volt_save">"Save"</string>
+    <string name="ps_volt_current_voltage">"當前電壓: "</string>
+    <string name="ps_volt_setting_to_apply">"應用程序設定: "</string>
+    <string name="pt_volt_control">電壓調整</string>
+    <string name="ps_volt_control">為每個頻率設定不同的電壓</string>
+    <string name="apply_values">應用程序</string>
+    <string name="freq">經常</string>
+    <string name="current">mV 當前</string>
+    <string name="saved">mV 已保存</string>
+    <string name="not_supported">您的內核無法支持電壓調整</string>
+    <!-- VM settings -->
+    <string name="ps_vm_set_on_boot">如果啟用將在啟動時恢復所有VM設定</string>
+    <string name="dirty_ratio_title">臟數據比例</string>
+    <string name="dirty_ratio_summary">更高的比例意味着更低的CPU小號但是app啟動速度更慢</string>
+    <string name="dirty_background_title">臟背景數據比例</string>
+    <string name="dirty_expire_title">臟數據過期</string>
+    <string name="dirty_writeback_title">臟數據寫回</string>
+    <string name="min_free_title">Minfree kb字節</string>
+    <string name="overcommit_title">過量使用率</string>
+    <string name="swappiness_title">無法緩存</string>
+    <string name="vfs_title">VFS 緩存的壓力</string>
+    <!-- Time in state -->
+    <string name="time_in_state">狀態內時間</string>
+    <string name="unused_cpu_states">未使用 CPU 狀態</string>
+    <string name="total_state_time">總計狀態時間</string>
+    <string name="no_states_file_found">沒有發現狀態統計文件，請確認手機是否兼容\n\n如果你正在運行定制化ROM或者內核, 請嘗試聯系開發者, 通知他們狀態統計文件不可讀.
+    </string>
+    <string name="deep_sleep">"深度睡眠"</string>
+    <!-- CPU info -->
+    <string name="kernel_info">LINUX內核信息</string>
+    <string name="cpu_info">CPU 信息</string>
+    <string name="mem_info">記憶體信息</string>
+    <string name="first_run_title">首次檢查是否 root</string>
+    <string name="su_success_title">成功!</string>
+    <string name="su_failed_title">失敗!</string>
+    <string name="first_run_message">此應用程序需要檢查 root 權限以及 busybox. 如果繼續請點擊確定. 如果不願意授權 root 權限, 請取消.
+    </string>
+    <string name="su_success_message">性能控制已經獲取到 root 權限并且找到 busybox. 准備開始!
+    </string>
+    <string name="su_cancel_message">你選擇了不檢查 root 和 busybox. 大部分選項在沒有 root 權限情況下無法使用. 抱歉!
+    </string>
+    <string name="su_failed_su_or_busybox">Root授權失敗或者 busybox 沒有被找到. 大部分選項在沒有 root 權限情況下無法使用. 抱歉!
+    </string>
+
+    <!-- Tools -->
+    <string name="prefcat_sh">自定義 SHELL 指令</string>
+    <string name="sh_title">編輯 shell 指令</string>
+    <string name="ps_sh">命令將會在啟動時被執行.</string>
+    <string name="sh_msg">如果沒有選擇請留空.</string>
+    <string name="clear">清除</string>
+    <string name="yes">是</string>
+    <string name="wait">請稍等…</string>
+    <string name="prefcat_wipe_cache">CACHE 和 DALVIK CACHE</string>
+    <string name="wipe_cache_title">清除 cache 和 dalvik cache</string>
+    <string name="ps_wipe_cache">Cache 分區: %s</string>
+    <string name="wipe_cache_msg">最後步驟, 系統將會被重啟. 是否繼續?</string>
+
+    <string name="prefcat_flash_img">刷入 IMG 文件</string>
+    <string name="kernel_img_title">刷入內核</string>
+    <string name="ps_kernel_img">刷入 boot.img 內核文件. 可以選擇獨立的 boot.img 文件或者任何包含 boot.img 的 zip 壓縮文件</string>
+    <string name="recovery_img_title">刷入 RECOVERY</string>
+    <string name="ps_recovery_img">刷入 recovery.img 恢復文件. 可以選擇獨立的 recovery.img 文件或者任何包含 recovery.img 的 zip 壓縮文件</string>
+    <string name="btn_choose">選擇 %s</string>
+    <string name="unsupported_info">您的設備還未支持.</string>
+    <string name="flash_info">將會被will be flashed on partition\n%s\n as</string>
+    <string name="dir_parent">&lt;Parent DIR&gt;</string>
+    <string name="dir">&lt;DIR&gt;</string>
+    <string name="bkexit">再次點擊退出</string>
+
+    <string name="prefcat_residual_files">清除殘余文件</string>
+    <string name="residual_files_title">清除殘余文件</string>
+    <string name="btncleanall">清除所有</string>
+    <string name="clean_files_msg">從 %s 來的殘余文件將被刪除. 是否繼續?</string>
+    <string name="filesstr">文件</string>
+    <string name="no_residuals">沒有殘余文件</string>
+
+    <string name="prefcat_optim_db">優化數據庫</string>
+    <string name="optim_db_title">優化數據庫</string>
+    <string name="ps_optim_db">此操作將會通過SQL指令VACUUM來優化數據庫.</string>
+
+    <string-array name="residual_info">
+        <item>包含安卓系統日志文件</item>
+        <item>包含從已奔潰應用程序來的日志文件</item>
+        <item>包含持續產生的日志文件</item>
+        <item>包含你開啟的應用程序的狀態</item>
+        <item>包含從 \'應用程序無響應\' 事件來的跟蹤信息</item>
+        <item>包含臨時文件</item>
+    </string-array>
+    <string name="prefcat_fix_perms">修復權限</string>
+    <string name="fix_perms_title">修復權限</string>
+    <string name="fix_perms_msg">操作將會持續几分鐘. 是否繼續?</string>
+    <string name="preflogg_fix_perms">開啟日志</string>
+
+    <string name="free">空閑 %s</string>
+    <string name="used">使用 %s</string>
+
+    <!-- 2.1.0 -->
+    <string name="verify">驗證中…</string>
+    <string name="bad_zip">%s 在 zip 中沒有被發現 !</string>
+    <string name="closebtn">關閉</string>
+    <string name="delallbtn">刪除全部</string>
+    <string name="del_file_msg">%s 將被刪除. 是否繼續?</string>
+    <string-array name="batt_status">
+        <item>未知</item>
+        <item>未知</item>
+        <item>充電中</item>
+        <item>放電中</item>
+        <item>已充滿</item>
+        <item>未充電</item>
+    </string-array>
+    <!-- 2.1.2 -->
+    <!-- ksm -->
+    <string name="prefcat_ksm">內核的相同記憶體頁面合并</string>
+    <string name="pt_run_ksm">開啟 KSM</string>
+    <string name="ksm_adv_title">設定</string>
+    <string name="ksm_fullscans">完全掃描:</string>
+    <string name="ksm_pagshared">已共享分頁:</string>
+    <string name="ksm_pagsharing">共享中分頁:</string>
+    <string name="ksm_pagunshared">未共享分頁:</string>
+    <string name="ksm_pagvolatile">易失性頁面:</string>
+    <string name="ksm_pagtoscan">需要掃描頁面:</string>
+    <string name="ksm_sleep">休眠 (ms):</string>
+
+    <!-- freezer -->
+    <string name="prefcat_freezer">凍結或解凍應用程序</string>
+    <string name="pt_freeze">凍結應用程序</string>
+    <string name="pt_unfreeze">解凍應用程序</string>
+    <string name="ps_freeze">所有已安裝應用程序的列表</string>
+    <string name="ps_unfreeze">已凍結應用程序的列表</string>
+    <string name="mt_system_packs">系統應用程序</string>
+    <string name="mt_user_packs">用戶應用程序</string>
+    <string name="freeze_msg">%s 將被凍結. 是否繼續?</string>
+    <string name="unfreeze_msg">%s 將被解凍. 是否繼續?</string>
+
+    <!-- zRam -->
+    <string name="prefcat_zram">zRAM</string>
+    <string name="pt_run_zram">啟用 zRam</string>
+    <string name="zram_set_title">設定</string>
+    <!-- 2.1.3 -->
+    <string name="ps_zram">壓縮記憶體來增加虛擬記憶體量</string>
+    <string name="mt_gov_ctrl">調節器設定</string>
+
+    <!-- PC Settings -->
+    <string name="pt_use_light_theme">使用 light 主題</string>
+    <string name="ps_use_light_theme">如果選中,性能控制將會使用 Holo light 主題</string>
+    <string name="pt_widget_bg_color">部件背景顏色</string>
+    <string name="pt_widget_text_color">部件字體顏色</string>
+    <string name="pt_ver">"版本 - "</string>
+    <!-- Color picker -->
+    <string name="dialog_color_picker">顏色選擇器</string>
+    <string name="press_color_to_apply">點擊顏色應用程序</string>
+    <string name="set">設定</string>
+    <string name="ics_color">Holo</string>
+
+    <!-- Drawer -->
+    <string name="navigation_drawer_toggle">開關抽屜</string>
+    <string name="navigation_drawer_open">打開抽屜導航</string>
+    <string name="navigation_drawer_close">關閉抽屜導航</string>
+    <string name="navigation_toggle_drawer">切換到抽屜</string>
+    <string name="navigation_toggle_tabbed">切換到Tab頁</string>
+
+</resources>
