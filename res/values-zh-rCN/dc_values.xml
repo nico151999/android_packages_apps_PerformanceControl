@@ -22,25 +22,25 @@ Copyright (C) 2012  James Roberts
     <string name="zram_size">80850944</string>
     <string name="zram_size_k">78956</string>
 
-    <string name="t_gpu_settings">GPU SETTINGS</string>
+    <string name="t_gpu_settings">GPU 设置</string>
 
     <!-- Performance Settings : GPU settings title -->
     <string name="gpu_title">GPU</string>
     <!-- Performance Settings : GPU settings sub items -->
-    <string name="gpu_vpll_title">Mali Use VPLL Clock</string>
-    <string name="gpu_vpll_summary">If VPLL is off, frequency may not be the exact value.</string>
-    <string name="gpu_min_freq_title">Minimum GPU frequency</string>
+    <string name="gpu_vpll_title">Mali 使用 VPLL 时脉</string>
+    <string name="gpu_vpll_summary">如果 VPLL 关闭, 频率不一定是准确数值</string>
+    <string name="gpu_min_freq_title">最低 GPU 频率</string>
     <string name="gpu_min_freq_summary" translatable="false">%s</string>
-    <string name="gpu_min_freq_volt_title">GPU minimum frequency voltage</string>
+    <string name="gpu_min_freq_volt_title">GPU 最低频率电压</string>
     <string name="gpu_min_freq_volt_summary" translatable="false">%s</string>
-    <string name="gpu_max_freq_title">Maximum GPU frequency</string>
+    <string name="gpu_max_freq_title">最高 GPU 频率</string>
     <string name="gpu_max_freq_summary" translatable="false">%s</string>
-    <string name="gpu_max_freq_volt_title">GPU maximum frequency voltage</string>
+    <string name="gpu_max_freq_volt_title">GPU 最高频率电压</string>
     <string name="gpu_max_freq_volt_summary" translatable="false">%s</string>
 
     <!-- Performance Settings : Set on boot option -->
-    <string name="performance_set_on_boot">Set on boot</string>
-    <string name="performance_set_on_boot_summary">Restore applied settings on boot</string>
+    <string name="performance_set_on_boot">重启后自动设置</string>
+    <string name="performance_set_on_boot_summary">重启后还原当前设置</string>
 
     <string name="volt_875_mv">875 mV</string>
     <string name="volt_900_mv">900 mV</string>
@@ -126,8 +126,8 @@ Copyright (C) 2012  James Roberts
     </string-array>
 
     <!-- Advance Settings : Double tap to wake -->
-    <string name="double_tap_wake">DOUBLE TAP TO WAKE</string>
-    <string name="bt_double_tap_wake">Enable double tap to wake in kernel</string>
-    <string name="dt_delta_title">Max double tap bound (pixels)</string>
-    <string name="dt_timeout_title">Max duration between tap (ms)</string>
+    <string name="double_tap_wake">双击唤醒</string>
+    <string name="bt_double_tap_wake">启动内核的双击唤醒</string>
+    <string name="dt_delta_title">双击最大的范围 (像数)</string>
+    <string name="dt_timeout_title">双击相隔最长时间 (ms)</string>
 </resources>

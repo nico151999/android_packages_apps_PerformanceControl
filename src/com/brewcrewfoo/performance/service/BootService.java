@@ -115,12 +115,13 @@ public class BootService extends Service implements Constants {
                 }
             }
 		//GPU vpll, default is 0
+		/* in PC_DEFAULTS now
             if (!preferences.getBoolean(Gpu.GPU_VPLL_PREF, false)) {
                 sb.append("busybox echo 0").append(" > ").append(Gpu.MALI_VPLL_FILE).append(";\n");
             }
 	    else {
                 sb.append("busybox echo 1").append(" > ").append(Gpu.MALI_VPLL_FILE).append(";\n");
-            }
+            }*/
             if (preferences.getBoolean(Gpu.SOB_PREF, false)) {
 		// GPU setup
 		String minFrequency = preferences.getString(Gpu.FREQ_MIN_PREF, null);
@@ -210,7 +211,23 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
-
+/* use init.d script. must be set before the first suspend
+            if (preferences.getBoolean(PREF_DOUBLE_TAB_BOOT, false)) {
+                if (preferences.getBoolean(PREF_DOUBLE_TAB_WAKE, false)) {
+                    sb.append("busybox echo 1 > " + DOUBLE_TAB_WAKE_PATH + ";\n");
+                } else {
+                    sb.append("busybox echo 0 > " + DOUBLE_TAB_WAKE_PATH + ";\n");
+                }
+                sb.append("busybox echo ").append(preferences.getInt(
+                        PREF_DOUBLE_TAB_DELTA, Integer.parseInt(	// get from preference
+                        Helpers.readOneLine(DOUBLE_TAB_DELTA_PATH))))	// default read from kernel
+                        .append(" > ").append(DOUBLE_TAB_DELTA_PATH).append(";\n");
+                sb.append("busybox echo ").append(preferences.getInt(
+                        PREF_DOUBLE_TAB_TIMEOUT, Integer.parseInt(
+                        Helpers.readOneLine(DOUBLE_TAB_TIMEOUT_PATH))))
+                        .append(" > ").append(DOUBLE_TAB_TIMEOUT_PATH).append(";\n");
+            }
+*/
             if (preferences.getBoolean(PREF_READ_AHEAD_BOOT, false)) {
                 final String values = preferences.getString(
                         PREF_READ_AHEAD, Helpers.readOneLine(READ_AHEAD_PATH));

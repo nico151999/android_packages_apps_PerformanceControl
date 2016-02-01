@@ -21,7 +21,7 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.4-omni";
+    public static final String VERSION_NUM = "2.1.4-smdk4210";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
@@ -228,6 +228,18 @@ public interface Constants {
     public static final String PREF_WIDGET_BG_COLOR = "widget_bg_color";
     public static final String PREF_WIDGET_TEXT_COLOR = "widget_text_color";
 
-}
+    // Double tab to wake
+    public static final String PREF_DOUBLE_TAB_WAKE = "pref_double_tap_wake";
+    public static final String DOUBLE_TAB_WAKE_PATH = "/sys/android_touch/doubletap_wake";
+    public static final String PREF_DOUBLE_TAB_DELTA = "pref_double_tap_delta";
+    public static final String DOUBLE_TAB_DELTA_PATH = "/sys/android_touch/dt_delta_limit";
+    public static final String PREF_DOUBLE_TAB_TIMEOUT = "pref_double_tap_timeout";
+    public static final String DOUBLE_TAB_TIMEOUT_PATH = "/sys/android_touch/dt_timeout";
+    public static final String PREF_DOUBLE_TAB_BOOT = "pref_double_tap_boot";
 
+    // init.d script
+    public static final String DEFAULT_INITD_FILE = "/system/etc/init.d/00PCdefaults";
+    public static final String REMOUNT_CMD = "busybox mount -o %s,remount /system";
+    public static final String REPLACE_CMD = "busybox sed -i \"s/%s/%s/\" "+DEFAULT_INITD_FILE;
+}
 

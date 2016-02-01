@@ -39,6 +39,30 @@ Copyright (C) 2012  James Roberts
             android:title="@string/sob" />
     </PreferenceCategory>
 
+    <!-- Double tap to wakeup -->
+    <PreferenceCategory
+        android:key="category_double_tap_wake"
+        android:title="@string/double_tap_wake">
+
+        <CheckBoxPreference
+            android:key="pref_double_tap_wake"
+            android:title="@string/bt_double_tap_wake" />
+
+        <Preference
+            android:key="pref_double_tap_delta"
+            android:title="@string/dt_delta_title" />
+
+        <Preference
+            android:key="pref_double_tap_timeout"
+            android:title="@string/dt_timeout_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_double_tap_boot"
+            android:summary="@string/pt_blx_boot"
+            android:title="@string/sob" />
+    </PreferenceCategory>
+
     <!-- Force high-end graphics -->
     <PreferenceCategory
         android:key="category_force_highend_gfx"

@@ -85,6 +85,10 @@ public class Advanced extends PreferenceFragment
     private SharedPreferences mPreferences;
 
     private CheckBoxPreference mForceHighEndGfx;
+// Double tap to wake
+    private CheckBoxPreference mDoubleTap2Wake;
+    private Preference mDoubleTapDelta;
+    private Preference mDoubleTapTimeout;
 
     private int mSeekbarProgress;
     private EditText settingText;
@@ -103,6 +107,9 @@ public class Advanced extends PreferenceFragment
         sreadahead = getResources().getString(R.string.ps_read_ahead, "");
 
         mReadAhead = (ListPreference) findPreference(PREF_READ_AHEAD);
+        mDoubleTap2Wake = (CheckBoxPreference) findPreference(PREF_DOUBLE_TAB_WAKE);
+        mDoubleTapDelta = findPreference(PREF_DOUBLE_TAB_DELTA);
+        mDoubleTapTimeout = findPreference(PREF_DOUBLE_TAB_TIMEOUT);
         mForceHighEndGfx = (CheckBoxPreference) findPreference(PREF_FORCE_HIGHEND_GFX);
         mBltimeout = findPreference(PREF_BLTIMEOUT);
         mBltouch = (CheckBoxPreference) findPreference(PREF_BLTOUCH);
@@ -172,6 +179,14 @@ public class Advanced extends PreferenceFragment
             mDynamicWriteBackActive.setSummary(Helpers.readOneLine(DIRTY_WRITEBACK_ACTIVE_PATH));
             mDynamicWriteBackSuspend.setSummary(Helpers.readOneLine(DIRTY_WRITEBACK_SUSPEND_PATH));
         }
+        if (!new File(DOUBLE_TAB_WAKE_PATH).exists()) {
+            PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_double_tap_wake");
+            getPreferenceScreen().removePreference(hideCat);
+        } else {
+            mDoubleTap2Wake.setChecked(Helpers.readOneLine(DOUBLE_TAB_WAKE_PATH).equals("1"));
+            mDoubleTapDelta.setSummary(Helpers.readOneLine(DOUBLE_TAB_DELTA_PATH) + " pixels");
+            mDoubleTapTimeout.setSummary(Helpers.readOneLine(DOUBLE_TAB_TIMEOUT_PATH) + " ms");
+	}
         final String readahead = Helpers.readOneLine(READ_AHEAD_PATH);
         mReadAhead.setValue(readahead);
         mReadAhead.setSummary(getString(R.string.ps_read_ahead, readahead + "  kb"));
@@ -351,6 +366,33 @@ public class Advanced extends PreferenceFragment
         } else if (preference == mForceHighEndGfx) {
             SystemProperties.set(PROP_FORCE_HIGHEND_GFX_PERSIST,
             mForceHighEndGfx.isChecked() ? "true" : "false");
+        } else if (preference == mDoubleTap2Wake) {
+            if (Integer.parseInt(Helpers.readOneLine(DOUBLE_TAB_WAKE_PATH)) == 0) {
+                if (Helpers.isSystemApp(getActivity())) {
+                    Helpers.writeOneLine(DOUBLE_TAB_WAKE_PATH, "1");
+                } else {
+                    new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DOUBLE_TAB_WAKE_PATH);
+                }
+            } else {
+                if (Helpers.isSystemApp(getActivity())) {
+                    Helpers.writeOneLine(DOUBLE_TAB_WAKE_PATH, "0");
+                } else {
+                    new CMDProcessor().su.runWaitFor("busybox echo 0 > " + DOUBLE_TAB_WAKE_PATH);
+                }
+            }
+            return true;
+        } else if (preference == mDoubleTapDelta) {
+            String title = getString(R.string.dt_delta_title);
+            int currentProgress = Integer.parseInt(Helpers.readOneLine(DOUBLE_TAB_DELTA_PATH));
+            openDialog(currentProgress, title, 5, 100, preference,
+                    DOUBLE_TAB_DELTA_PATH, PREF_DOUBLE_TAB_DELTA);
+            return true;
+        } else if (preference == mDoubleTapTimeout) {
+            String title = getString(R.string.dt_timeout_title);
+            int currentProgress = Integer.parseInt(Helpers.readOneLine(DOUBLE_TAB_TIMEOUT_PATH));
+            openDialog(currentProgress, title, 10, 200, preference,
+                    DOUBLE_TAB_TIMEOUT_PATH, PREF_DOUBLE_TAB_TIMEOUT);
+            return true;
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);
@@ -438,6 +480,30 @@ public class Advanced extends PreferenceFragment
                         .remove(PREF_DIRTY_WRITEBACK_SUSPEND)
                         .apply();
             }
+        } else if (key.equals(PREF_DOUBLE_TAB_BOOT)) {	// write preference if set on boot checked
+            final String wake = Helpers.readOneLine(DOUBLE_TAB_WAKE_PATH);
+            final String delta = Helpers.readOneLine(DOUBLE_TAB_DELTA_PATH);
+            final String timeout = Helpers.readOneLine(DOUBLE_TAB_TIMEOUT_PATH);
+/* use init.d script */
+	    final CMDProcessor cmd = new CMDProcessor();
+	    // remount /system to rw
+	    cmd.su.runWaitFor(String.format(REMOUNT_CMD, "rw"));
+            if (sharedPreferences.getBoolean(key, false)) {
+		// replace the DT_WAKE_VAL, DT_DELTA_VAL & DT_TIMEOUT_VAL
+		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_WAKE_VAL\\=.*", "DT_WAKE_VAL="+wake));
+		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_DELTA_VAL\\=.*", "DT_DELTA_VAL="+delta));
+		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_TIMEOUT_VAL\\=.*", "DT_TIMEOUT_VAL="+timeout));
+            } else {
+		// disable the DT_WAKE_VAL, DT_DELTA_VAL & DT_TIMEOUT_VAL
+		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_WAKE_VAL\\=.*", "DT_WAKE_VAL=-1"));
+		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_DELTA_VAL\\=.*", "DT_DELTA_VAL=-1"));
+		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_TIMEOUT_VAL\\=.*", "DT_TIMEOUT_VAL=-1"));
+            }
+	    // remount /system back to ro
+	    cmd.su.runWaitFor(String.format(REMOUNT_CMD, "ro"));
+
+            mDoubleTapDelta.setSummary(delta + " pixels");
+            mDoubleTapTimeout.setSummary(timeout + " ms");
         }
     }
 
