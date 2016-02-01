@@ -67,10 +67,9 @@ public class Gpu extends PreferenceFragment implements
     public static final String SOB_PREF = "pref_gpu_set_on_boot";
 
     private final CMDProcessor cmd = new CMDProcessor();
-    private static final String DEFAULT_DATA_PATH = "/sdcard/.PerformanceControl";
-    private static final String DEFAULT_DATA_FILE = "init.defaults.sh";
-    private static final String REMOUNT_CMD = "busybox mount -o %s,remount /dev/block/platform/dw_mmc/by-name/FACTORYFS /system";
-    private static final String REPLACE_CMD = "busybox sed -i \"/%s/ c %<s%s\" "+DEFAULT_DATA_PATH+"/"+DEFAULT_DATA_FILE;
+    private static final String DEFAULT_INITD_FILE = "/system/etc/init.d/00PCdefaults";
+    private static final String REMOUNT_CMD = "busybox mount -o %s,remount /system";
+    private static final String REPLACE_CMD = "busybox sed -i \"s/%s/%s/\" "+DEFAULT_INITD_FILE;
 
     private static final String TAG = "GPUSettings";
 
@@ -213,38 +212,22 @@ public class Gpu extends PreferenceFragment implements
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-	String temp;
-
         if (preference == mGpuVpll) {
-	    mGpuVpll.setSummary("***Reboot required*** Mali use vpll will be changed after reboot...");
-	    // remount /system to rw and change /etc/init.d/01GPUsettings
-/*	    if (!Helpers.getMount("rw")) {
-		Log.d(TAG, "Could not remount /system to R/W");
-	    } else */
-	    // create a DEFAULT_DATA_FILE if not exist
-	    temp = DEFAULT_DATA_PATH+"/"+DEFAULT_DATA_FILE;
-	    if (!Helpers.fileExists(DEFAULT_DATA_FILE)) {
-		File newDir = new File(DEFAULT_DATA_PATH);
-		newDir.mkdir();
-		File newFile = new File(temp);
-		try {
-		    if (newFile.createNewFile()) {
-		    }
-		} catch (IOException e) {
-		    Log.e(TAG, "error create file " + temp);
-		    e.printStackTrace();
-		}
-		if (!Helpers.writeOneLine(temp, 
-			"VPLL_VAL=0\necho $VPLL_VAL > /sys/module/mali/parameters/mali_use_vpll"))
-		    Log.e(TAG, "error write" + temp);
+	    mGpuVpll.setSummary("***Reboot required*** Not working on Andoird 5.0 or above ...");
+
+	    // check if DEFAULT_INITD_FILE exist
+	    if (!Helpers.fileExists(DEFAULT_INITD_FILE)) {
+		Log.e(TAG, "Can't locate default init.d file " + DEFAULT_INITD_FILE);
 	    }
-	    if (mGpuVpll.isChecked()) {
-		temp = String.format(REPLACE_CMD, "VPLL_VAL=", "1");
-		cmd.su.runWaitFor(temp);
-	    } else {
-		temp = String.format(REPLACE_CMD, "VPLL_VAL=", "0");
-		cmd.su.runWaitFor(temp);
-//		Helpers.getMount("ro");
+	    else {
+		String temp = (mGpuVpll.isChecked()) ? "1":"0";
+		// mount /system as rw
+		cmd.su.runWaitFor(String.format(REMOUNT_CMD, "rw"));
+		// replace the VPLL_VAL
+		cmd.su.runWaitFor(String.format(REPLACE_CMD, "VPLL=.", "VPLL="+temp));
+		// mount /system back to ro
+		cmd.su.runWaitFor(String.format(REMOUNT_CMD, "ro"));
+		Log.i(TAG, "vpll set to " + temp);
 	    }
 	    // @daniel, let super to handle checked state           return true;
         }
