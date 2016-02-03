@@ -116,20 +116,20 @@ public class BootService extends Service implements Constants {
             }
 		//GPU vpll, default is 0
 		/* in PC_DEFAULTS now
-            if (!preferences.getBoolean(Gpu.GPU_VPLL_PREF, false)) {
-                sb.append("busybox echo 0").append(" > ").append(Gpu.MALI_VPLL_FILE).append(";\n");
+            if (!preferences.getBoolean(GPU_VPLL_PREF, false)) {
+                sb.append("busybox echo 0").append(" > ").append(MALI_VPLL_FILE).append(";\n");
             }
 	    else {
-                sb.append("busybox echo 1").append(" > ").append(Gpu.MALI_VPLL_FILE).append(";\n");
+                sb.append("busybox echo 1").append(" > ").append(MALI_VPLL_FILE).append(";\n");
             }*/
-            if (preferences.getBoolean(Gpu.SOB_PREF, false)) {
+            if (preferences.getBoolean(SOB_PREF, false)) {
 		// GPU setup
-		String minFrequency = preferences.getString(Gpu.FREQ_MIN_PREF, null);
-		String maxFrequency = preferences.getString(Gpu.FREQ_MAX_PREF, null);
-		String minFreqVolt = preferences.getString(Gpu.MIN_FREQ_VOLT_PREF, null);
-		String maxFreqVolt = preferences.getString(Gpu.MAX_FREQ_VOLT_PREF, null);
-		String currentFrequencies[] = Helpers.readOneLine(Gpu.CUR_FREQ_FILE).split(" ");
-		String currentVoltages[] = Helpers.readOneLine(Gpu.CUR_VOLT_FILE).split(" ");
+		String minFrequency = preferences.getString(FREQ_MIN_PREF, null);
+		String maxFrequency = preferences.getString(FREQ_MAX_PREF, null);
+		String minFreqVolt = preferences.getString(MIN_FREQ_VOLT_PREF, null);
+		String maxFreqVolt = preferences.getString(MAX_FREQ_VOLT_PREF, null);
+		String currentFrequencies[] = Helpers.readOneLine(CUR_FREQ_FILE).split(" ");
+		String currentVoltages[] = Helpers.readOneLine(CUR_VOLT_FILE).split(" ");
 		String availableFrequenciesLine[] = c.getResources().getStringArray(R.array.gpu_max_freq_values);
 		String availableVoltagesLine[] = c.getResources().getStringArray(R.array.gpu_max_voltage_values);
 		boolean noFreqSettings = ((availableFrequenciesLine == null) ||
@@ -156,7 +156,7 @@ public class BootService extends Service implements Constants {
 		    }
                     sb.append("busybox echo ").append(currentVoltages[0])
                             .append(" ").append(currentVoltages[1])
-                            .append(" > ").append(Gpu.CUR_VOLT_FILE).append(";\n");
+                            .append(" > ").append(CUR_VOLT_FILE).append(";\n");
 		    Log.d(TAG, "GPU voltage settings restored.");
 		}
 
@@ -179,7 +179,7 @@ public class BootService extends Service implements Constants {
 		    }
                     sb.append("busybox echo ").append(currentFrequencies[0])
                             .append(" ").append(currentFrequencies[1])
-                            .append(" > ").append(Gpu.CUR_FREQ_FILE).append(";\n");
+                            .append(" > ").append(CUR_FREQ_FILE).append(";\n");
 		    Log.d(TAG, "GPU clock settings restored.");
 		}
 	    }
@@ -211,7 +211,7 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
-/* use init.d script. must be set before the first suspend
+/* use init.d script. must be set right after boot before first suspend
             if (preferences.getBoolean(PREF_DOUBLE_TAB_BOOT, false)) {
                 if (preferences.getBoolean(PREF_DOUBLE_TAB_WAKE, false)) {
                     sb.append("busybox echo 1 > " + DOUBLE_TAB_WAKE_PATH + ";\n");

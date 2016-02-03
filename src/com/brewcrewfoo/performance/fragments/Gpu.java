@@ -39,7 +39,6 @@ import android.util.Log;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.activities.PCSettings;
 import com.brewcrewfoo.performance.util.CMDProcessor;
-import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 
 //import com.android.settings.Utils;
@@ -47,6 +46,8 @@ import com.brewcrewfoo.performance.util.Helpers;
 import java.lang.Runtime;
 import java.io.File;
 import java.io.IOException;
+
+import static com.brewcrewfoo.performance.util.Constants.*;
 
 //
 // CPU Related Settings
@@ -67,9 +68,6 @@ public class Gpu extends PreferenceFragment implements
     public static final String SOB_PREF = "pref_gpu_set_on_boot";
 
     private final CMDProcessor cmd = new CMDProcessor();
-    private static final String DEFAULT_INITD_FILE = "/system/etc/init.d/00PCdefaults";
-    private static final String REMOUNT_CMD = "busybox mount -o %s,remount /system";
-    private static final String REPLACE_CMD = "busybox sed -i \"s/%s/%s/\" "+DEFAULT_INITD_FILE;
 
     private static final String TAG = "GPUSettings";
 

@@ -484,8 +484,9 @@ public class Advanced extends PreferenceFragment
             final String wake = Helpers.readOneLine(DOUBLE_TAB_WAKE_PATH);
             final String delta = Helpers.readOneLine(DOUBLE_TAB_DELTA_PATH);
             final String timeout = Helpers.readOneLine(DOUBLE_TAB_TIMEOUT_PATH);
-/* use init.d script */
 	    final CMDProcessor cmd = new CMDProcessor();
+
+/* use init.d script */
 	    // remount /system to rw
 	    cmd.su.runWaitFor(String.format(REMOUNT_CMD, "rw"));
             if (sharedPreferences.getBoolean(key, false)) {

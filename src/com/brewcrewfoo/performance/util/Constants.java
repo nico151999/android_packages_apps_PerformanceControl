@@ -228,6 +228,19 @@ public interface Constants {
     public static final String PREF_WIDGET_BG_COLOR = "widget_bg_color";
     public static final String PREF_WIDGET_TEXT_COLOR = "widget_text_color";
 
+    // GPU Settings
+    public static final String GPU_VPLL_PREF = "pref_gpu_vpll";
+    public static final String MALI_VPLL_FILE = "/sys/module/mali/parameters/mali_use_vpll";
+    public static final String FREQ_MIN_PREF = "pref_gpu_freq_min";
+    public static final String MIN_FREQ_VOLT_PREF = "pref_gpu_min_freq_volt";
+    public static final String FREQ_MAX_PREF = "pref_gpu_freq_max";
+    public static final String MAX_FREQ_VOLT_PREF = "pref_gpu_max_freq_volt";
+    public static final String CUR_FREQ_FILE = "/sys/class/misc/gpu_clock_control/gpu_control";
+    public static final String CUR_VOLT_FILE = "/sys/class/misc/gpu_voltage_control/gpu_control";
+    public static String FREQ_MAX_FILE = null;
+    public static String FREQ_MIN_FILE = null;
+    public static final String SOB_PREF = "pref_gpu_set_on_boot";
+
     // Double tab to wake
     public static final String PREF_DOUBLE_TAB_WAKE = "pref_double_tap_wake";
     public static final String DOUBLE_TAB_WAKE_PATH = "/sys/android_touch/doubletap_wake";
@@ -240,6 +253,6 @@ public interface Constants {
     // init.d script
     public static final String DEFAULT_INITD_FILE = "/system/etc/init.d/00PCdefaults";
     public static final String REMOUNT_CMD = "busybox mount -o %s,remount /system";
-    public static final String REPLACE_CMD = "busybox sed -i \"s/%s/%s/\" "+DEFAULT_INITD_FILE;
+    public static final String REPLACE_CMD = "busybox sed -i \"s/%s/%s/\" " + DEFAULT_INITD_FILE;
 }
 
