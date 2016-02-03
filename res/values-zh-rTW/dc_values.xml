@@ -22,7 +22,7 @@ Copyright (C) 2012  James Roberts
     <string name="zram_size">80850944</string>
     <string name="zram_size_k">78956</string>
 
-    <string name="t_gpu_settings">GPU 設定</string>
+    <string name="tab_gpu_settings">GPU 設定</string>
 
     <!-- Performance Settings : GPU settings title -->
     <string name="gpu_title">GPU</string>
