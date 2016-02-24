@@ -107,12 +107,14 @@ public class Gpu extends PreferenceFragment implements
         mMaxFrequencyPref = (ListPreference) findPreference(FREQ_MAX_PREF);
         mMaxFreqVoltPref = (ListPreference) findPreference(MAX_FREQ_VOLT_PREF);
 
+	/* Disable vpll, hang at start
 	String vpll;
         if (!Helpers.fileExists(MALI_VPLL_FILE) || (vpll = Helpers.readOneLine(MALI_VPLL_FILE)) == null) {
             mGpuVpll.setEnabled(false);
 	} else {
 	    mGpuVpll.setChecked(vpll.equals("1"));
-	}
+	}*/
+        mGpuVpll.setEnabled(false);
 
         // Disable the min/max list if we dont have a list file
         if (!Helpers.fileExists(CUR_FREQ_FILE) || (currentFrequenciesLine = Helpers.readOneLine(CUR_FREQ_FILE)) == null) {
