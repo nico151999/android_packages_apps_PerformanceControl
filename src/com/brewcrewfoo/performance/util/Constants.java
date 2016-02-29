@@ -1,6 +1,7 @@
 /*
  * Performance Control - An Android CPU Control application Copyright (C) 2012
  * James Roberts
+ * Mali GPU & Tegra3 CPU support (http://github.com/danielhk) 2016/2/24
  * 
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -21,7 +22,7 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.4-smdk4210";
+    public static final String VERSION_NUM = "2.1.5";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
@@ -30,6 +31,7 @@ public interface Constants {
     // Fragment IDs
     public static final int FRAGMENT_ID_CPUSETTINGS = 0;
     public static final int FRAGMENT_ID_GPUSETTINGS = 1;
+    public static final int FRAGMENT_ID_TEGRA3SETTINGS = 1;
     public static final int FRAGMENT_ID_BATTERYINFO = 2;
     public static final int FRAGMENT_ID_OOMSETTINGS = 3;
     public static final int FRAGMENT_ID_VM = 4;
@@ -45,7 +47,6 @@ public interface Constants {
     public static final String CPU_FREQ_TAIL = "/cpufreq/scaling_cur_freq";
     public static final String CUR_CPU_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
     public static final String MAX_FREQ_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq";
-    public static final String TEGRA_MAX_FREQ_PATH = "/sys/module/cpu_tegra/parameters/cpu_user_cap";
     public static final String MIN_FREQ_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq";
     public static final String STEPS_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies";
     public static final String GOVERNORS_LIST_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors";
@@ -254,5 +255,25 @@ public interface Constants {
     public static final String DEFAULT_INITD_FILE = "/system/etc/init.d/00PCdefaults";
     public static final String REMOUNT_CMD = "busybox mount -o %s,remount /system";
     public static final String REPLACE_CMD = "busybox sed -i \"s/%s/%s/\" " + DEFAULT_INITD_FILE;
-}
 
+    // Tegra3 Settings
+    public static final String TEGRA_MAX_FREQ_PATH = "/sys/module/cpu_tegra/parameters/cpu_user_cap";
+    public static final String PREF_GPU_MAX_FREQ = "pref_gpu_max_freq";
+    public static final String TEGRA_GPU_MAX_FREQ_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/gpu_oc";
+    public static final String PREF_GPU_MAX_SOB = "pref_gpu_max_boot";
+    public static final String PREF_GPU_UV_MV = "pref_gpu_voltage";
+    public static final String TEGRA_GPU_UV_MV_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/avp_UV_mV_table";
+    public static final String PREF_GPU_VOLT_SOB = "pref_gpu_voltage_boot";
+    public static final String PREF_GPU_VOLT_RESTORE = "pref_gpu_voltage_restore";
+    public static final String PREF_LP_UV_MV = "pref_lp_voltage";
+    public static final String TEGRA_LP_UV_MV_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/lp_UV_mV_table";
+    public static final String PREF_LP_VOLT_SOB = "pref_lp_voltage_boot";
+    public static final String PREF_EMC_UV_MV = "pref_emc_voltage";
+    public static final String TEGRA_EMC_UV_MV_PATH = "/sys/devices/system/cpu/cpu0/cpufreq/emc_UV_mV_table";
+    public static final String PREF_EMC_VOLT_SOB = "pref_emc_voltage_boot";
+    public static final String PREF_MIN_BACKLIGHT = "pref_min_backlight";
+    public static final String TEGRA_MIN_BACKLIGHT_PATH = "/sys/module/board_grouper_panel/parameters/min_backlight";
+    public static final String PREF_MAX_BACKLIGHT = "pref_max_backlight";
+    public static final String TEGRA_MAX_BACKLIGHT_PATH = "/sys/module/board_grouper_panel/parameters/max_backlight";
+    public static final String PREF_BACKLIGHT_SOB = "pref_panel_backlight_boot";
+}

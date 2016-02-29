@@ -1,7 +1,7 @@
 /*
  * Performance Control - An Android CPU Control application Copyright (C) 2012
  * Jared Rummler Copyright (C) 2012 James Roberts
- * Mali GPU support (http://github.com/danielhk) 2014/6/12
+ * Mali GPU & Tegra3 CPU support (http://github.com/danielhk) 2016/2/24
  * 
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -584,5 +584,9 @@ public class Helpers implements Constants {
 
     public static boolean maliGpuExists() {
         return new File(MALI_VPLL_FILE).exists();
+    }
+
+    public static boolean tegra3Exists() {
+        return new File(TEGRA_GPU_MAX_FREQ_PATH).exists();
     }
 }

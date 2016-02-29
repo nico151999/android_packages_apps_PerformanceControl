@@ -1,7 +1,7 @@
 /*
  * Performance Control - An Android CPU Control application Copyright (C) 2012
  * James Roberts
- * Mali GPU support (http://github.com/danielhk) 2014/6/12
+ * Mali GPU & Tegra3 CPU support (http://github.com/danielhk) 2016/2/24
  * 
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -57,6 +57,7 @@ import com.brewcrewfoo.performance.fragments.Gpu;
 import com.brewcrewfoo.performance.fragments.DiskInfo;
 import com.brewcrewfoo.performance.fragments.OOMSettings;
 import com.brewcrewfoo.performance.fragments.TimeInState;
+import com.brewcrewfoo.performance.fragments.Tegra3;
 import com.brewcrewfoo.performance.fragments.Tools;
 import com.brewcrewfoo.performance.fragments.VM;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
@@ -89,6 +90,7 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
     // Fields
     //==================================
     private static boolean mGpuSupported;
+    private static boolean mTegra3Supported;
     private static boolean mToolSupported;
     private static boolean mIsLightTheme;
     private static int DRAWER_MODE = 0;
@@ -108,6 +110,7 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
         mVoltageExists = Helpers.voltageFileExists();
 
 	mGpuSupported = Helpers.maliGpuExists();
+        mTegra3Supported = Helpers.tegra3Exists();
 	mToolSupported = !getResources().getBoolean(R.bool.config_showPerformanceOnly);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -314,6 +317,9 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
         if (item.equals(getString(R.string.t_cpu_settings))) {
             return FRAGMENT_ID_CPUSETTINGS;
         }
+        if (item.equals(getString(R.string.t_tegra3_settings))) {
+            return FRAGMENT_ID_TEGRA3SETTINGS;
+        }
         if (item.equals(getString(R.string.t_gpu_settings))) {
             return FRAGMENT_ID_GPUSETTINGS;
         }
@@ -357,8 +363,10 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
     private String[] getTitles() {
         List<String> titles = new ArrayList<String>();
         titles.add(getString(R.string.t_cpu_settings));
-	if (mGpuSupported)
-	    titles.add(getString(R.string.t_gpu_settings));
+	if (mTegra3Supported)
+            titles.add(getString(R.string.t_tegra3_settings));
+	else if (mGpuSupported)
+		titles.add(getString(R.string.t_gpu_settings));
         titles.add(getString(R.string.t_battery_info));
         titles.add(getString(R.string.t_adv_settings));
         titles.add(getString(R.string.t_time_in_state));
@@ -396,7 +404,8 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
                     fragment = new CPUSettings();
                     break;
                 case FRAGMENT_ID_GPUSETTINGS:
-                    fragment = new Gpu();
+                //case FRAGMENT_ID_TEGRA3SETTINGS:
+                    fragment = (mTegra3Supported)? new Tegra3() : new Gpu();
                     break;
                 case FRAGMENT_ID_BATTERYINFO:
                     fragment = new BatteryInfo();
@@ -446,8 +455,10 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
             super(fm);
         	List<Fragment> frag = new ArrayList<Fragment>();
 		frag.add(new CPUSettings());
-		if (mGpuSupported)
-		    frag.add(new Gpu());
+		if (mTegra3Supported)
+		    frag.add(new Tegra3());
+		else if (mGpuSupported)
+			frag.add(new Gpu());
 		frag.add(new BatteryInfo());
 		frag.add(new Advanced());
 		frag.add(new TimeInState());

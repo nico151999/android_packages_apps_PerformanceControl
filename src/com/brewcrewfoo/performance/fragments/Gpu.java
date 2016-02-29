@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2012-2014 The CyanogenMod Project
+ * Performance Control - An Android CPU Control application Copyright (C) 2012
+ * Jared Rummler Copyright (C) 2012 James Roberts
+ * Mali GPU support (http://github.com/danielhk) 2015/1/14
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
