@@ -164,62 +164,36 @@ public class FlasherActivity extends Activity implements Constants, ActivityThem
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.flash_kernel) {
             tip = "kernel";
-            if (getPart(model)) {
-                if (tip.equalsIgnoreCase("kernel")) {
-                    flasherInfo.setText("boot.img " + getString(R.string.flash_info, part) + " " + tip.toUpperCase());
-                    chooseBtn.setText(getString(R.string.btn_choose, "boot.img"));
-                } else {
-                    flasherInfo.setText("recovery.img " + getString(R.string.flash_info, part) + " " + tip.toUpperCase());
-                    chooseBtn.setText(getString(R.string.btn_choose, "recovery.img"));
-                }
-                chooseBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View arg0) {
-                        //------------
-                        try {
-                            Intent intent2 = new Intent(FlasherActivity.this, FileChooser.class);
-                            intent2.putExtra("mod", tip);
-                            intent2.putExtra("part", part);
-                            startActivity(intent2);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error launching filechooser activity");
-                        }
-                    }
-                });
-            } else {
-                chooseBtn.setVisibility(View.GONE);
-            }
-
-        }
+	}
         if (item.getItemId() == R.id.flash_recovery) {
             tip = "recovery";
-            if (getPart(model)) {
-                if (tip.equalsIgnoreCase("kernel")) {
-                    flasherInfo.setText("boot.img " + getString(R.string.flash_info, part) + " " + tip.toUpperCase());
-                    chooseBtn.setText(getString(R.string.btn_choose, "boot.img"));
-                } else {
-                    flasherInfo.setText("recovery.img " + getString(R.string.flash_info, part) + " " + tip.toUpperCase());
-                    chooseBtn.setText(getString(R.string.btn_choose, "recovery.img"));
-                }
-                chooseBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View arg0) {
-                        //------------
-                        try {
-                            Intent intent2 = new Intent(FlasherActivity.this, FileChooser.class);
-                            intent2.putExtra("mod", tip);
-                            intent2.putExtra("part", part);
-                            startActivity(intent2);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error launching filechooser activity");
-                        }
-                    }
-                });
-            } else {
-                chooseBtn.setVisibility(View.GONE);
-            }
+	}
+	if (getPart(model)) {
+	    if (tip.equalsIgnoreCase("kernel")) {
+		flasherInfo.setText("boot.img " + getString(R.string.flash_info, part) + " " + tip.toUpperCase());
+		chooseBtn.setText(getString(R.string.btn_choose, "boot.img"));
+	    } else {
+		flasherInfo.setText("recovery.img " + getString(R.string.flash_info, part) + " " + tip.toUpperCase());
+		chooseBtn.setText(getString(R.string.btn_choose, "recovery.img"));
+	    }
 
-        }
+	    chooseBtn.setOnClickListener(new View.OnClickListener() {
+		@Override
+		public void onClick(View arg0) {
+		    //------------
+		    try {
+			Intent intent2 = new Intent(FlasherActivity.this, FileChooser.class);
+			intent2.putExtra("mod", tip);
+			intent2.putExtra("part", part);
+			startActivity(intent2);
+		    } catch (Exception e) {
+			Log.e(TAG, "Error launching filechooser activity");
+		    }
+		}
+	    });
+	} else {
+	    chooseBtn.setVisibility(View.GONE);
+	}
         return true;
     }
 
