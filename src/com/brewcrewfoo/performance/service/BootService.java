@@ -1,6 +1,7 @@
 /*
  * Performance Control - An Android CPU Control application Copyright (C) 2012
  * James Roberts
+ * Mali & Tegra3 CPU support (http://github.com/danielhk) 2016/2/24
  * 
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -32,6 +33,7 @@ import android.util.Log;
 import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
 import com.brewcrewfoo.performance.fragments.Gpu;
+import com.brewcrewfoo.performance.fragments.Tegra3;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Voltage;
@@ -81,7 +83,27 @@ public class BootService extends Service implements Constants {
             final String BLN_PATH = Helpers.bln_path();
             final String gov = preferences.getString(PREF_GOV, Helpers.readOneLine(GOVERNOR_PATH));
 
+	    if (!c.getResources().getBoolean(R.bool.config_use_initd)) {
+		// DT2W
+		if (preferences.getBoolean(PREF_DOUBLE_TAB_BOOT, false)) {
+		    if (preferences.getBoolean(PREF_DOUBLE_TAB_WAKE, false)) {
+			sb.append("busybox echo 1 > " + DOUBLE_TAB_WAKE_PATH + ";\n");
+		    } else {
+			sb.append("busybox echo 0 > " + DOUBLE_TAB_WAKE_PATH + ";\n");
+		    }
+		    sb.append("busybox echo ").append(preferences.getInt(
+			PREF_DOUBLE_TAB_DELTA, Integer.parseInt(	// get from preference
+			Helpers.readOneLine(DOUBLE_TAB_DELTA_PATH))))	// default read from kernel
+		        .append(" > ").append(DOUBLE_TAB_DELTA_PATH).append(";\n");
+		    sb.append("busybox echo ").append(preferences.getInt(
+			PREF_DOUBLE_TAB_TIMEOUT, Integer.parseInt(
+			Helpers.readOneLine(DOUBLE_TAB_TIMEOUT_PATH))))
+			.append(" > ").append(DOUBLE_TAB_TIMEOUT_PATH).append(";\n");
+		}
+	    }
+
             if (preferences.getBoolean(CPU_SOB, false)) {
+		// CPU Settings
                 final String max = preferences.getString(
                         PREF_MAX_CPU, Helpers.readOneLine(MAX_FREQ_PATH));
                 final String min = preferences.getString(
@@ -123,7 +145,7 @@ public class BootService extends Service implements Constants {
                 sb.append("busybox echo 1").append(" > ").append(MALI_VPLL_FILE).append(";\n");
             }*/
             if (preferences.getBoolean(SOB_PREF, false)) {
-		// GPU setup
+		// Mali GPU setup
 		String minFrequency = preferences.getString(FREQ_MIN_PREF, null);
 		String maxFrequency = preferences.getString(FREQ_MAX_PREF, null);
 		String minFreqVolt = preferences.getString(MIN_FREQ_VOLT_PREF, null);
@@ -184,6 +206,7 @@ public class BootService extends Service implements Constants {
 		}
 	    }
             if (preferences.getBoolean(VOLTAGE_SOB, false)) {
+		// CPU Voltage Settings
                 if (Helpers.voltageFileExists()) {
                     final List<Voltage> volts = VoltageControlSettings.getVolts(preferences);
                     if (Helpers.getVoltagePath().equals(VDD_PATH)) {
@@ -211,23 +234,57 @@ public class BootService extends Service implements Constants {
                     }
                 }
             }
-/* use init.d script. must be set right after boot before first suspend
-            if (preferences.getBoolean(PREF_DOUBLE_TAB_BOOT, false)) {
-                if (preferences.getBoolean(PREF_DOUBLE_TAB_WAKE, false)) {
-                    sb.append("busybox echo 1 > " + DOUBLE_TAB_WAKE_PATH + ";\n");
-                } else {
-                    sb.append("busybox echo 0 > " + DOUBLE_TAB_WAKE_PATH + ";\n");
-                }
-                sb.append("busybox echo ").append(preferences.getInt(
-                        PREF_DOUBLE_TAB_DELTA, Integer.parseInt(	// get from preference
-                        Helpers.readOneLine(DOUBLE_TAB_DELTA_PATH))))	// default read from kernel
-                        .append(" > ").append(DOUBLE_TAB_DELTA_PATH).append(";\n");
-                sb.append("busybox echo ").append(preferences.getInt(
-                        PREF_DOUBLE_TAB_TIMEOUT, Integer.parseInt(
-                        Helpers.readOneLine(DOUBLE_TAB_TIMEOUT_PATH))))
-                        .append(" > ").append(DOUBLE_TAB_TIMEOUT_PATH).append(";\n");
+	    // Tegra3 Settings
+            if (preferences.getBoolean(PREF_BACKLIGHT_SOB, false)) {
+                final String min = preferences.getString(PREF_MIN_BACKLIGHT,
+                        		Helpers.readOneLine(TEGRA_MIN_BACKLIGHT_PATH));
+		sb.append("busybox echo ").append(min).append(" > ")
+		  .append(TEGRA_MIN_BACKLIGHT_PATH).append(";\n");
+                final String max = preferences.getString(PREF_MAX_BACKLIGHT,
+                        		Helpers.readOneLine(TEGRA_MAX_BACKLIGHT_PATH));
+		sb.append("busybox echo ").append(max).append(" > ")
+		  .append(TEGRA_MAX_BACKLIGHT_PATH).append(";\n");
             }
-*/
+            if (preferences.getBoolean(PREF_GPU_MAX_SOB, false)) {
+                final String value = preferences.getString(PREF_GPU_MAX_FREQ,
+                        		Helpers.readOneLine(TEGRA_GPU_MAX_FREQ_PATH));
+		sb.append("busybox echo ").append(value).append(" > ")
+		  .append(TEGRA_GPU_MAX_FREQ_PATH).append(";\n");
+            }
+            if (preferences.getBoolean(PREF_GPU_VOLT_SOB, false)) {
+		final List<Voltage> volts = Tegra3.readVoltages(TEGRA_GPU_UV_MV_PATH);
+		sb.append("busybox echo ");		// header
+		for (int i=0;i< Tegra3.MAX_VOLTAGE_PREF;i++) {
+		    String value = preferences.getString(PREF_GPU_UV_MV+Integer.toString(i),
+                        		volts.get(i).getCurrentMv());
+		    volts.get(i).setCurrentMV(value);
+		    sb.append(value).append(" ");
+		}
+		sb.append("> ").append(TEGRA_GPU_UV_MV_PATH).append(";\n");
+            }
+            if (preferences.getBoolean(PREF_LP_VOLT_SOB, false)) {
+		final List<Voltage> volts = Tegra3.readVoltages(TEGRA_LP_UV_MV_PATH);
+		sb.append("busybox echo ");		// header
+		for (int i=0;i< Tegra3.MAX_VOLTAGE_PREF;i++) {
+		    String value = preferences.getString(PREF_LP_UV_MV+Integer.toString(i),
+                        		volts.get(i).getCurrentMv());
+		    volts.get(i).setCurrentMV(value);
+		    sb.append(value).append(" ");
+		}
+		sb.append("> ").append(TEGRA_LP_UV_MV_PATH).append(";\n");
+            }
+            if (preferences.getBoolean(PREF_EMC_VOLT_SOB, false)) {
+		final List<Voltage> volts = Tegra3.readVoltages(TEGRA_EMC_UV_MV_PATH);
+		sb.append("busybox echo ");		// header
+		for (int i=0;i< Tegra3.MAX_VOLTAGE_PREF;i++) {
+		    String value = preferences.getString(PREF_EMC_UV_MV+Integer.toString(i),
+                        		volts.get(i).getCurrentMv());
+		    volts.get(i).setCurrentMV(value);
+		    sb.append(value).append(" ");
+		}
+		sb.append("> ").append(TEGRA_EMC_UV_MV_PATH).append(";\n");
+            }
+	    // Other Settings
             if (preferences.getBoolean(PREF_READ_AHEAD_BOOT, false)) {
                 final String values = preferences.getString(
                         PREF_READ_AHEAD, Helpers.readOneLine(READ_AHEAD_PATH));
@@ -235,7 +292,6 @@ public class BootService extends Service implements Constants {
                     sb.append("busybox echo ").append(values).append(" > ")
                             .append(READ_AHEAD_PATH).append(";\n");
             }
-
             if (FASTCHARGE_PATH != null) {
                 if (preferences.getBoolean(PREF_FASTCHARGE, false)) {
                     sb.append("busybox echo 1 > ").append(FASTCHARGE_PATH).append(";\n");
