@@ -1,6 +1,7 @@
 /*
  * Performance Control - An Android CPU Control application Copyright (C) 2012
  * Jared Rummler Copyright (C) 2012 James Roberts
+ * Mali GPU support (http://github.com/danielhk) 2014/6/12
  * 
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -579,5 +580,9 @@ public class Helpers implements Constants {
 
     public static boolean hasOverallStats() {
         return fileExists(TIME_IN_STATE_OVERALL_PATH);
+    }
+
+    public static boolean maliGpuExists() {
+        return new File(MALI_VPLL_FILE).exists();
     }
 }

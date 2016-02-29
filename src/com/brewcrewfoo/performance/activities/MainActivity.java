@@ -1,6 +1,7 @@
 /*
  * Performance Control - An Android CPU Control application Copyright (C) 2012
  * James Roberts
+ * Mali GPU support (http://github.com/danielhk) 2014/6/12
  * 
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -64,7 +65,6 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.widgets.CustomDrawerLayout;
 
-
 public class MainActivity extends Activity implements Constants, ActivityThemeChangeInterface {
 
     //==================================
@@ -88,10 +88,14 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
     //==================================
     // Fields
     //==================================
+    private static boolean mGpuSupported;
+    private static boolean mToolSupported;
+    private static boolean mIsLightTheme;
     private static int DRAWER_MODE = 0;
     private static boolean mVoltageExists;
     private SharedPreferences mPreferences;
     private boolean mIsTabbed = true;
+    private String[] mTitles;
 
     //==================================
     // Overridden Methods
@@ -103,14 +107,21 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
 
         mVoltageExists = Helpers.voltageFileExists();
 
+	mGpuSupported = Helpers.maliGpuExists();
+	mToolSupported = !getResources().getBoolean(R.bool.config_showPerformanceOnly);
+
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUserLearnedDrawer = mPreferences.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+
+	setTheme();
 
         if (getResources().getBoolean(R.bool.config_allow_toggle_tabbed))
             mIsTabbed = mPreferences.getBoolean(PREF_IS_TABBED,
                     getResources().getBoolean(R.bool.config_use_tabbed));
         else
             mIsTabbed = getResources().getBoolean(R.bool.config_use_tabbed);
+
+        mTitles = getTitles();
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -120,16 +131,9 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
-//    }
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        ViewGroup rootView;
 
         if (!mIsTabbed) {
 	    setContentView(R.layout.activity_main);
-//            rootView = (ViewGroup) inflater.inflate(R.layout.activity_main, container, false);
 
             mDrawerListView = (ListView) findViewById(R.id.pc_navigation_drawer);
             mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -143,38 +147,26 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
                     getActionBar().getThemedContext(),
                     android.R.layout.simple_list_item_1,
                     android.R.id.text1,
-                    getTitles()));
+                    mTitles));
             mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-/*
-            setUpNavigationDrawer(
-                    rootView.findViewById(R.id.pc_navigation_drawer),
-                    (CustomDrawerLayout) rootView.findViewById(R.id.pc_drawer_layout));
-*/
+
             setUpNavigationDrawer(
                     findViewById(R.id.pc_navigation_drawer),
                     (CustomDrawerLayout) findViewById(R.id.pc_drawer_layout));
         } else {
 	    setContentView(R.layout.activity_main_tabbed);
-//            rootView = (ViewGroup) inflater.inflate(R.layout.activity_main_tabbed, container, false);
-            //ViewPager mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
 	    ViewPager mViewPager = (ViewPager) findViewById(R.id.viewpager);
             TitleAdapter titleAdapter = new TitleAdapter(getFragmentManager());
             mViewPager.setAdapter(titleAdapter);
             mViewPager.setCurrentItem(0);
 
-//            PagerTabStrip mPagerTabStrip = (PagerTabStrip) rootView.findViewById(R.id.pagerTabStrip);
 	    PagerTabStrip mPagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
             mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.pc_blue));
             mPagerTabStrip.setDrawFullUnderline(false);
         }
 
-//        if (container instanceof PreferenceFrameLayout) {
-//            ((PreferenceFrameLayout.LayoutParams) rootView.getLayoutParams()).removeBorders = true;
-//        }
-
         checkForSu();
 
-//        return rootView;
     }
 /*
     @Override
@@ -198,66 +190,26 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
             outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
         }
     }
-/*
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate((mIsTabbed ? R.menu.menu_tabbed : R.menu.menu_drawer), menu);
-        if (!getResources().getBoolean(R.bool.config_allow_toggle_tabbed)) {
-            menu.removeItem(R.id.pc_action_tabbed);
-        }
-        restoreActionBar();
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-*/
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (!mIsTabbed) {
-            if (mDrawerToggle.onOptionsItemSelected(item)) {
-                return true;
-            }
-        }
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent homeIntent = new Intent();
-                homeIntent.setClassName("com.android.settings", "com.android.settings.Settings");
-                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(homeIntent);
-                return true;
-            case R.id.pc_toggle_drawer:
-                if (isDrawerOpen())
-                    mDrawerLayout.closeDrawer(mFragmentContainerView);
-                else
-                    mDrawerLayout.openDrawer(mFragmentContainerView);
-                return true;
-            case R.id.pc_action_tabbed:
-                mIsTabbed = !mIsTabbed;
-                mPreferences.edit().putBoolean(PREF_IS_TABBED, mIsTabbed).commit();
-                Helpers.restartPC(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public boolean isThemeChanged() {
-        /*final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
-        return is_light_theme != mIsLightTheme;*/
-        return false;
+        final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
+        return is_light_theme != mIsLightTheme;
     }
 
     @Override
     public void setTheme() {
-        /*final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
-        mIsLightTheme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
-        setTheme(is_light_theme ? R.style.Theme_Light : R.style.Theme_Dark);*/
+        final boolean is_light_theme = mPreferences.getBoolean(PREF_USE_LIGHT_THEME, false);
+        mIsLightTheme = is_light_theme;
+        setTheme(is_light_theme ? R.style.Theme_Light : R.style.Theme_Dark);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //if (isThemeChanged()) {
-        //    Helpers.restartPC(this);
-        //}
+        if (isThemeChanged()) {
+            Helpers.restartPC(this);
+        }
     }
 
     //==================================
@@ -288,26 +240,13 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-//                if (!isAdded()) {
                     return;
-//                }
-
-//                this.invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-//                if (!isAdded()) {
                     return;
-//                }
-/*
-                if (!mUserLearnedDrawer) {
-                    mUserLearnedDrawer = true;
-                    mPreferences.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).commit();
-                }
-*/
-//                this.invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
 
@@ -347,8 +286,8 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
 
     private ActionBar getActionBar() {
         return this.getActionBar();
-    }
-*/
+    }*/
+
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
         if (mDrawerListView != null) {
@@ -360,161 +299,80 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
 
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.pc_container, PlaceholderFragment.newInstance(getPosition(position)))
+                .replace(R.id.pc_container, PlaceholderFragment.newInstance(getPosition(mTitles[position])))
                 .commit();
     }
 
     /**
-     * Depending on if the item is shown or not, it increases
-     * the position to make the activity load the right fragment.
+     * Gets the position of the item
      *
-     * @param pos The selected position
-     * @return the modified position
+     * @param item
+     *            The item
+     * @return the item position
      */
-    public int getPosition(int pos) {
-        int position = pos;
-        switch (DRAWER_MODE) {
-            default:
-            case 0:
-                position = pos;
-                break;
-            case 1:
-                if (pos > 1) position = pos + 1;
-                break;
-            case 2:
-                if (pos > 4) position = pos + 1;
-                break;
-            case 3:
-                if (pos > 1) position = pos + 1;
-                if (pos > 4) position = pos + 2;
-                break;
+    public int getPosition(String item) {
+        if (item.equals(getString(R.string.t_cpu_settings))) {
+            return FRAGMENT_ID_CPUSETTINGS;
         }
-        return position;
+        if (item.equals(getString(R.string.t_gpu_settings))) {
+            return FRAGMENT_ID_GPUSETTINGS;
+        }
+        if (item.equals(getString(R.string.t_battery_info))) {
+            return FRAGMENT_ID_BATTERYINFO;
+        }
+        if (item.equals(getString(R.string.t_oom_settings))) {
+            return FRAGMENT_ID_OOMSETTINGS;
+        }
+        if (item.equals(getString(R.string.prefcat_vm_settings))) {
+            return FRAGMENT_ID_VM;
+        }
+        if (item.equals(getString(R.string.t_volt_settings))) {
+            return FRAGMENT_ID_VOLTAGECONROL;
+        }
+        if (item.equals(getString(R.string.t_adv_settings))) {
+            return FRAGMENT_ID_ADVANCED;
+        }
+        if (item.equals(getString(R.string.t_time_in_state))) {
+            return FRAGMENT_ID_TIMEINSTATE;
+        }
+        if (item.equals(getString(R.string.t_cpu_info))) {
+            return FRAGMENT_ID_CPUINFO;
+        }
+        if (item.equals(getString(R.string.t_disk_info))) {
+            return FRAGMENT_ID_DISKINFO;
+        }
+        if (item.equals(getString(R.string.t_tools))) {
+            return FRAGMENT_ID_TOOLS;
+        }
+        return -1;
     }
 
     /**
      * Get a list of titles for the tabstrip to display depending on if the
-     * voltage control fragment and battery fragment will be displayed. (Depends on the result of
-     * Helpers.voltageTableExists() & Helpers.showBattery()
+     * voltage control fragment and battery fragment will be displayed. (Depends
+     * on the result of Helpers.voltageTableExists() & Helpers.showBattery()
      *
      * @return String[] containing titles
      */
     private String[] getTitles() {
-        String titleString[];
+        List<String> titles = new ArrayList<String>();
+        titles.add(getString(R.string.t_cpu_settings));
+	if (mGpuSupported)
+	    titles.add(getString(R.string.t_gpu_settings));
+        titles.add(getString(R.string.t_battery_info));
+        titles.add(getString(R.string.t_adv_settings));
+        titles.add(getString(R.string.t_time_in_state));
+        titles.add(getString(R.string.t_cpu_info));
+        titles.add(getString(R.string.t_disk_info));
         if (mVoltageExists) {
-            if (Helpers.showBattery()) {
-                if (getResources().getBoolean(R.bool.config_showPerformanceOnly)) {
-                    DRAWER_MODE = 0;
-                    titleString = new String[]{
-                            getString(R.string.t_cpu_settings),
-                            getString(R.string.t_gpu_settings),
-                            getString(R.string.t_battery_info),
-                            getString(R.string.t_oom_settings),
-                            getString(R.string.prefcat_vm_settings),
-                            getString(R.string.t_volt_settings),
-                            getString(R.string.t_adv_settings),
-                            getString(R.string.t_time_in_state),
-                            getString(R.string.t_cpu_info),
-                            getString(R.string.t_disk_info)};
-                } else {
-                    DRAWER_MODE = 0;
-                    titleString = new String[]{
-                            getString(R.string.t_cpu_settings),
-                            getString(R.string.t_gpu_settings),
-                            getString(R.string.t_battery_info),
-                            getString(R.string.t_oom_settings),
-                            getString(R.string.prefcat_vm_settings),
-                            getString(R.string.t_volt_settings),
-                            getString(R.string.t_adv_settings),
-                            getString(R.string.t_time_in_state),
-                            getString(R.string.t_cpu_info),
-                            getString(R.string.t_disk_info),
-                            getString(R.string.t_tools)};
-                }
-            } else {
-                if (getResources().getBoolean(R.bool.config_showPerformanceOnly)) {
-                    DRAWER_MODE = 1;
-                    titleString = new String[]{
-                            getString(R.string.t_cpu_settings),
-                            getString(R.string.t_gpu_settings),
-                            getString(R.string.t_oom_settings),
-                            getString(R.string.prefcat_vm_settings),
-                            getString(R.string.t_volt_settings),
-                            getString(R.string.t_adv_settings),
-                            getString(R.string.t_time_in_state),
-                            getString(R.string.t_cpu_info),
-                            getString(R.string.t_disk_info)};
-                } else {
-                    DRAWER_MODE = 1;
-                    titleString = new String[]{
-                            getString(R.string.t_cpu_settings),
-                            getString(R.string.t_gpu_settings),
-                            getString(R.string.t_oom_settings),
-                            getString(R.string.prefcat_vm_settings),
-                            getString(R.string.t_volt_settings),
-                            getString(R.string.t_adv_settings),
-                            getString(R.string.t_time_in_state),
-                            getString(R.string.t_cpu_info),
-                            getString(R.string.t_disk_info),
-                            getString(R.string.t_tools)};
-                }
-            }
-        } else {
-            if (Helpers.showBattery()) {
-                if (getResources().getBoolean(R.bool.config_showPerformanceOnly)) {
-                    DRAWER_MODE = 2;
-                    titleString = new String[]{
-                            getString(R.string.t_cpu_settings),
-                            getString(R.string.t_gpu_settings),
-                            getString(R.string.t_battery_info),
-                            getString(R.string.t_oom_settings),
-                            getString(R.string.prefcat_vm_settings),
-                            getString(R.string.t_adv_settings),
-                            getString(R.string.t_time_in_state),
-                            getString(R.string.t_cpu_info),
-                            getString(R.string.t_disk_info)};
-                } else {
-                    DRAWER_MODE = 2;
-                    titleString = new String[]{
-                            getString(R.string.t_cpu_settings),
-                            getString(R.string.t_gpu_settings),
-                            getString(R.string.t_battery_info),
-                            getString(R.string.t_oom_settings),
-                            getString(R.string.prefcat_vm_settings),
-                            getString(R.string.t_adv_settings),
-                            getString(R.string.t_time_in_state),
-                            getString(R.string.t_cpu_info),
-                            getString(R.string.t_disk_info),
-                            getString(R.string.t_tools)};
-                }
-            } else {
-                if (getResources().getBoolean(R.bool.config_showPerformanceOnly)) {
-                    DRAWER_MODE = 3;
-                    titleString = new String[]{
-                            getString(R.string.t_cpu_settings),
-                            getString(R.string.t_gpu_settings),
-                            getString(R.string.t_oom_settings),
-                            getString(R.string.prefcat_vm_settings),
-                            getString(R.string.t_adv_settings),
-                            getString(R.string.t_time_in_state),
-                            getString(R.string.t_cpu_info),
-                            getString(R.string.t_disk_info)};
-                } else {
-                    DRAWER_MODE = 3;
-                    titleString = new String[]{
-                            getString(R.string.t_cpu_settings),
-                            getString(R.string.t_gpu_settings),
-                            getString(R.string.t_oom_settings),
-                            getString(R.string.prefcat_vm_settings),
-                            getString(R.string.t_adv_settings),
-                            getString(R.string.t_time_in_state),
-                            getString(R.string.t_cpu_info),
-                            getString(R.string.t_disk_info),
-                            getString(R.string.t_tools)};
-                }
-            }
+            titles.add(getString(R.string.t_volt_settings));
         }
-        return titleString;
+        titles.add(getString(R.string.t_oom_settings));
+        titles.add(getString(R.string.prefcat_vm_settings));
+        if (mToolSupported) {
+            titles.add(getString(R.string.t_tools));
+	}
+        return titles.toArray(new String[titles.size()]);
     }
 
     //==================================
@@ -586,63 +444,24 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
 
         public TitleAdapter(FragmentManager fm) {
             super(fm);
-            if (mVoltageExists) {
-                if (Helpers.showBattery()) {
-                    frags[0] = new CPUSettings();
-                    frags[1] = new Gpu();
-                    frags[2] = new BatteryInfo();
-                    frags[3] = new OOMSettings();
-                    frags[4] = new VM();
-                    frags[5] = new VoltageControlSettings();
-                    frags[6] = new Advanced();
-                    frags[7] = new TimeInState();
-                    frags[8] = new CPUInfo();
-                    frags[9] = new DiskInfo();
-                    if (!getResources().getBoolean(R.bool.config_showPerformanceOnly)) {
-                        frags[10] = new Tools();
-                    }
-                } else {
-                    frags[0] = new CPUSettings();
-                    frags[1] = new Gpu();
-                    frags[2] = new OOMSettings();
-                    frags[3] = new VM();
-                    frags[4] = new VoltageControlSettings();
-                    frags[5] = new Advanced();
-                    frags[6] = new TimeInState();
-                    frags[7] = new CPUInfo();
-                    frags[8] = new DiskInfo();
-                    if (!getResources().getBoolean(R.bool.config_showPerformanceOnly)) {
-                        frags[9] = new Tools();
-                    }
+        	List<Fragment> frag = new ArrayList<Fragment>();
+		frag.add(new CPUSettings());
+		if (mGpuSupported)
+		    frag.add(new Gpu());
+		frag.add(new BatteryInfo());
+		frag.add(new Advanced());
+		frag.add(new TimeInState());
+		frag.add(new CPUInfo());
+		frag.add(new DiskInfo());
+		if (mVoltageExists) {
+		    frag.add(new VoltageControlSettings());
+		}
+		frag.add(new OOMSettings());
+		frag.add(new VM());
+                if (mToolSupported) {
+                    frag.add(new Tools());
                 }
-            } else {
-                if (Helpers.showBattery()) {
-                    frags[0] = new CPUSettings();
-                    frags[1] = new Gpu();
-                    frags[2] = new BatteryInfo();
-                    frags[3] = new OOMSettings();
-                    frags[4] = new VM();
-                    frags[5] = new Advanced();
-                    frags[6] = new TimeInState();
-                    frags[7] = new CPUInfo();
-                    frags[8] = new DiskInfo();
-                    if (!getResources().getBoolean(R.bool.config_showPerformanceOnly)) {
-                        frags[9] = new Tools();
-                    }
-                } else {
-                    frags[0] = new CPUSettings();
-                    frags[1] = new Gpu();
-                    frags[2] = new OOMSettings();
-                    frags[3] = new VM();
-                    frags[4] = new Advanced();
-                    frags[5] = new TimeInState();
-                    frags[6] = new CPUInfo();
-                    frags[7] = new DiskInfo();
-                    if (!getResources().getBoolean(R.bool.config_showPerformanceOnly)) {
-                        frags[8] = new Tools();
-                    }
-                }
-            }
+		frags = frag.toArray(new Fragment[frag.size()]);
         }
 
         @Override
