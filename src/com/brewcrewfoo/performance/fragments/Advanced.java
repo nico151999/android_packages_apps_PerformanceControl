@@ -367,19 +367,23 @@ public class Advanced extends PreferenceFragment
             SystemProperties.set(PROP_FORCE_HIGHEND_GFX_PERSIST,
             mForceHighEndGfx.isChecked() ? "true" : "false");
         } else if (preference == mDoubleTap2Wake) {
+	    final SharedPreferences.Editor editor = mPreferences.edit();
             if (Integer.parseInt(Helpers.readOneLine(DOUBLE_TAB_WAKE_PATH)) == 0) {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(DOUBLE_TAB_WAKE_PATH, "1");
                 } else {
                     new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DOUBLE_TAB_WAKE_PATH);
                 }
+		editor.putBoolean(PREF_DOUBLE_TAB_WAKE, true);
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(DOUBLE_TAB_WAKE_PATH, "0");
                 } else {
                     new CMDProcessor().su.runWaitFor("busybox echo 0 > " + DOUBLE_TAB_WAKE_PATH);
                 }
+		editor.putBoolean(PREF_DOUBLE_TAB_WAKE, false);
             }
+	    editor.commit();
             return true;
         } else if (preference == mDoubleTapDelta) {
             String title = getString(R.string.dt_delta_title);
@@ -484,27 +488,39 @@ public class Advanced extends PreferenceFragment
             final String wake = Helpers.readOneLine(DOUBLE_TAB_WAKE_PATH);
             final String delta = Helpers.readOneLine(DOUBLE_TAB_DELTA_PATH);
             final String timeout = Helpers.readOneLine(DOUBLE_TAB_TIMEOUT_PATH);
-	    final CMDProcessor cmd = new CMDProcessor();
-
+	    if (getResources().getBoolean(R.bool.config_use_initd)) {
 /* use init.d script */
-	    // remount /system to rw
-	    cmd.su.runWaitFor(String.format(REMOUNT_CMD, "rw"));
-            if (sharedPreferences.getBoolean(key, false)) {
-		// replace the DT_WAKE_VAL, DT_DELTA_VAL & DT_TIMEOUT_VAL
-		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_WAKE_VAL\\=.*", "DT_WAKE_VAL="+wake));
-		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_DELTA_VAL\\=.*", "DT_DELTA_VAL="+delta));
-		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_TIMEOUT_VAL\\=.*", "DT_TIMEOUT_VAL="+timeout));
-            } else {
-		// disable the DT_WAKE_VAL, DT_DELTA_VAL & DT_TIMEOUT_VAL
-		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_WAKE_VAL\\=.*", "DT_WAKE_VAL=-1"));
-		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_DELTA_VAL\\=.*", "DT_DELTA_VAL=-1"));
-		cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_TIMEOUT_VAL\\=.*", "DT_TIMEOUT_VAL=-1"));
-            }
-	    // remount /system back to ro
-	    cmd.su.runWaitFor(String.format(REMOUNT_CMD, "ro"));
-
-            mDoubleTapDelta.setSummary(delta + " pixels");
-            mDoubleTapTimeout.setSummary(timeout + " ms");
+	        final CMDProcessor cmd = new CMDProcessor();
+		// remount /system to rw
+		cmd.su.runWaitFor(String.format(REMOUNT_CMD, "rw"));
+		if (sharedPreferences.getBoolean(key, false)) {
+		    // replace the DT_WAKE_VAL, DT_DELTA_VAL & DT_TIMEOUT_VAL
+		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_WAKE_VAL\\=.*", "DT_WAKE_VAL="+wake));
+		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_DELTA_VAL\\=.*", "DT_DELTA_VAL="+delta));
+		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_TIMEOUT_VAL\\=.*", "DT_TIMEOUT_VAL="+timeout));
+		} else {
+		    // disable the DT_WAKE_VAL, DT_DELTA_VAL & DT_TIMEOUT_VAL
+		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_WAKE_VAL\\=.*", "DT_WAKE_VAL=-1"));
+		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_DELTA_VAL\\=.*", "DT_DELTA_VAL=-1"));
+		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_TIMEOUT_VAL\\=.*", "DT_TIMEOUT_VAL=-1"));
+		}
+		// remount /system back to ro
+		cmd.su.runWaitFor(String.format(REMOUNT_CMD, "ro"));
+	    } else {
+		if (sharedPreferences.getBoolean(key, false)) {
+		    editor.putBoolean(PREF_DOUBLE_TAB_WAKE, wake.equals("1"))
+			  .putInt(PREF_DOUBLE_TAB_DELTA, Integer.parseInt(delta))
+			  .putInt(PREF_DOUBLE_TAB_TIMEOUT, Integer.parseInt(timeout))
+			  .apply();
+		} else {
+		    editor.remove(PREF_DOUBLE_TAB_WAKE)
+			  .remove(PREF_DOUBLE_TAB_DELTA)
+			  .remove(PREF_DOUBLE_TAB_TIMEOUT)
+			  .apply();
+		}
+	    }
+            if (mDoubleTapDelta != null) mDoubleTapDelta.setSummary(delta + " pixels");
+            if (mDoubleTapTimeout != null) mDoubleTapTimeout.setSummary(timeout + " ms");
         }
     }
 
