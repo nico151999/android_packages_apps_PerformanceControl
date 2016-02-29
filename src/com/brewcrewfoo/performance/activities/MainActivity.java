@@ -327,7 +327,7 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
             return FRAGMENT_ID_VM;
         }
         if (item.equals(getString(R.string.t_volt_settings))) {
-            return FRAGMENT_ID_VOLTAGECONROL;
+            return FRAGMENT_ID_VOLTAGECONTROL;
         }
         if (item.equals(getString(R.string.t_adv_settings))) {
             return FRAGMENT_ID_ADVANCED;
@@ -407,7 +407,7 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
                 case FRAGMENT_ID_VM:
                     fragment = new VM();
                     break;
-                case FRAGMENT_ID_VOLTAGECONROL:
+                case FRAGMENT_ID_VOLTAGECONTROL:
                     fragment = new VoltageControlSettings();
                     break;
                 case FRAGMENT_ID_ADVANCED:

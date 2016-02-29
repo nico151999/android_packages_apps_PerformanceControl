@@ -33,7 +33,7 @@ public interface Constants {
     public static final int FRAGMENT_ID_BATTERYINFO = 2;
     public static final int FRAGMENT_ID_OOMSETTINGS = 3;
     public static final int FRAGMENT_ID_VM = 4;
-    public static final int FRAGMENT_ID_VOLTAGECONROL = 5;
+    public static final int FRAGMENT_ID_VOLTAGECONTROL = 5;
     public static final int FRAGMENT_ID_ADVANCED = 6;
     public static final int FRAGMENT_ID_TIMEINSTATE = 7;
     public static final int FRAGMENT_ID_CPUINFO = 8;
