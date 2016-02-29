@@ -29,4 +29,7 @@
     <!-- If false, user can't switch between menu_tabbed and menu_drawer mode -->
     <bool name="config_allow_toggle_tabbed">true</bool>
 
+    <!-- Whether use init.d for dt2w and gpu boot settings  -->
+    <bool name="config_use_initd">true</bool>
+
 </resources>

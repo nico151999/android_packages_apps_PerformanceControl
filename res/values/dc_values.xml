@@ -2,6 +2,8 @@
 <!--
 Performance Control - An Android CPU Control application
 Copyright (C) 2012  James Roberts
+Mali GPU support (http://github.com/danielhk) 2015/1/14
+Tegra3 CPU support (http://github.com/danielhk) 2016/2/24
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,7 +24,7 @@ Copyright (C) 2012  James Roberts
     <string name="zram_size">80850944</string>
     <string name="zram_size_k">78956</string>
 
-    <string name="tab_gpu_settings">GPU SETTINGS</string>
+    <string name="t_gpu_settings">GPU SETTINGS</string>
 
     <!-- Performance Settings : GPU settings title -->
     <string name="gpu_title">GPU</string>
@@ -42,28 +44,29 @@ Copyright (C) 2012  James Roberts
     <string name="performance_set_on_boot">Set on boot</string>
     <string name="performance_set_on_boot_summary">Restore applied settings on boot</string>
 
-    <string name="volt_875_mv">875 mV</string>
-    <string name="volt_900_mv">900 mV</string>
-    <string name="volt_925_mv">925 mV</string>
-    <string name="volt_950_mv">950 mV</string>
-    <string name="volt_975_mv">975 mV</string>
-    <string name="volt_1000_mv">1000 mV</string>
-    <string name="volt_1025_mv">1025 mV</string>
-    <string name="volt_1050_mv">1050 mV</string>
-    <string name="volt_1075_mv">1075 mV</string>
-    <string name="volt_1100_mv">1100 mV</string>
-    <string name="volt_1125_mv">1125 mV</string>
-    <string name="volt_1150_mv">1150 mV</string>
-    <string name="volt_1175_mv">1175 mV</string>
-    <string name="volt_1200_mv">1200 mV</string>
+    <string name="volt_875_mv" translatable="false">875 mV</string>
+    <string name="volt_900_mv" translatable="false">900 mV</string>
+    <string name="volt_925_mv" translatable="false">925 mV</string>
+    <string name="volt_950_mv" translatable="false">950 mV</string>
+    <string name="volt_975_mv" translatable="false">975 mV</string>
+    <string name="volt_1000_mv" translatable="false">1000 mV</string>
 
-    <string name="freq_100_mhz">100 MHz</string>
-    <string name="freq_108_mhz">108 MHz</string>
-    <string name="freq_160_mhz">160 MHz</string>
-    <string name="freq_267_mhz">267 MHz</string>
-    <string name="freq_330_mhz">330 MHz</string>
-    <string name="freq_400_mhz">400 MHz</string>
-    <string name="freq_440_mhz">440 MHz</string>
+    <string name="volt_1025_mv" translatable="false">1025 mV</string>
+    <string name="volt_1050_mv" translatable="false">1050 mV</string>
+    <string name="volt_1075_mv" translatable="false">1075 mV</string>
+    <string name="volt_1100_mv" translatable="false">1100 mV</string>
+    <string name="volt_1125_mv" translatable="false">1125 mV</string>
+    <string name="volt_1150_mv" translatable="false">1150 mV</string>
+    <string name="volt_1175_mv" translatable="false">1175 mV</string>
+    <string name="volt_1200_mv" translatable="false">1200 mV</string>
+
+    <string name="freq_100_mhz" translatable="false">100 MHz</string>
+    <string name="freq_108_mhz" translatable="false">108 MHz</string>
+    <string name="freq_160_mhz" translatable="false">160 MHz</string>
+    <string name="freq_267_mhz" translatable="false">267 MHz</string>
+    <string name="freq_330_mhz" translatable="false">330 MHz</string>
+    <string name="freq_400_mhz" translatable="false">400 MHz</string>
+    <string name="freq_440_mhz" translatable="false">440 MHz</string>
 
     <string-array name="gpu_min_voltage" translatable="false">
         <item>@string/volt_875_mv</item>
@@ -127,7 +130,21 @@ Copyright (C) 2012  James Roberts
 
     <!-- Advance Settings : Double tap to wake -->
     <string name="double_tap_wake">DOUBLE TAP TO WAKE</string>
-    <string name="bt_double_tap_wake">Enable double tap to wake in kernel</string>
+    <string name="dt_double_tap_wake">Enable double tap to wake in kernel</string>
     <string name="dt_delta_title">Max double tap bound (pixels)</string>
     <string name="dt_timeout_title">Max duration between tap (ms)</string>
+
+    <!-- Tegra3 Settings -->
+    <string name="t_tegra3_settings">Tegra3 Settings</string>
+    <string name="gpu_frequency_title">GPU FREQUENCY</string>
+    <string name="gpu_voltage_title">GPU VOLTAGES</string>
+    <string name="lp_voltage_title">LP CORE VOLTAGES</string>
+    <string name="emc_voltage_title">eMMC VOLTAGE</string>
+    <string name="volt_restore">Restore voltage to default values</string>
+    <string name="empty_voltage_title">(null)</string>
+    <string name="warning_restore">ATTENTION!\nAll voltage values will be restored to the default, are you sure?</string>
+    <string name="panel_backlight_title">PANEL BACKLIGHT</string>
+    <string name="panel_min_title">Panel Minimum brightness (1-50)</string>
+    <string name="panel_max_title">Panel Maximum brightness (100-255)</string>
+
 </resources>

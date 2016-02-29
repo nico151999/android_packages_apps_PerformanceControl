@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+Performance Control - An Android CPU Control application
+Copyright (C) 2012  James Roberts
+Tegra3 CPU support (http://github.com/danielhk) 2016/2/24
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Brightness -->
+    <PreferenceCategory
+        android:key="category_panel_backlight"
+        android:title="@string/panel_backlight_title">
+
+	<EditTextPreference
+	    android:key="pref_min_backlight"
+	    android:title="@string/panel_min_title"
+	    android:maxLength="2"
+	    android:inputType="number" />
+
+	<EditTextPreference
+	    android:key="pref_max_backlight"
+	    android:title="@string/panel_max_title"
+	    android:maxLength="3"
+	    android:inputType="number" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_panel_backlight_boot"
+            android:title="@string/ps_blx_boot" />
+
+    </PreferenceCategory>
+
+    <!-- Gpu Max Freq -->
+    <PreferenceCategory
+        android:key="category_gpu_max_freq"
+        android:title="@string/gpu_frequency_title">
+
+	<Preference
+	    android:key="pref_gpu_max_freq"
+	    android:title="@string/gpu_max_freq_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_gpu_max_boot"
+            android:title="@string/ps_blx_boot" />
+
+    </PreferenceCategory>
+
+    <!-- Gpu voltage -->
+    <PreferenceCategory
+        android:key="category_gpu_voltage"
+        android:title="@string/gpu_voltage_title">
+
+        <Preference
+            android:key="pref_gpu_voltage0"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_gpu_voltage1"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_gpu_voltage2"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_gpu_voltage3"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_gpu_voltage4"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_gpu_voltage5"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_gpu_voltage6"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_gpu_voltage7"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_gpu_voltage8"
+            android:title="@string/empty_voltage_title" />
+
+        <CheckBoxPreference
+            android:key="pref_gpu_voltage_boot"
+            android:defaultValue="false"
+            android:title="@string/ps_blx_boot" />
+
+    </PreferenceCategory>
+
+    <!-- LP Core voltage -->
+    <PreferenceCategory
+        android:key="category_lp_voltage"
+        android:title="@string/lp_voltage_title">
+
+        <Preference
+            android:key="pref_lp_voltage0"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_lp_voltage1"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_lp_voltage2"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_lp_voltage3"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_lp_voltage4"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_lp_voltage5"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_lp_voltage6"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_lp_voltage7"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_lp_voltage8"
+            android:title="@string/empty_voltage_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_lp_voltage_boot"
+            android:title="@string/ps_blx_boot" />
+
+    </PreferenceCategory>
+
+    <!-- eMMC voltage -->
+    <PreferenceCategory
+        android:key="category_emc_voltage"
+        android:title="@string/emc_voltage_title">
+
+        <Preference
+            android:key="pref_emc_voltage0"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_emc_voltage1"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_emc_voltage2"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_emc_voltage3"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_emc_voltage4"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_emc_voltage5"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_emc_voltage6"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_emc_voltage7"
+            android:title="@string/empty_voltage_title" />
+
+        <Preference
+            android:key="pref_emc_voltage8"
+            android:title="@string/empty_voltage_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_emc_voltage_boot"
+            android:title="@string/ps_blx_boot" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
+

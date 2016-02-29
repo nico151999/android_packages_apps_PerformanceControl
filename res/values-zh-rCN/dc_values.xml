@@ -2,6 +2,8 @@
 <!--
 Performance Control - An Android CPU Control application
 Copyright (C) 2012  James Roberts
+Mali GPU support (http://github.com/danielhk) 2015/1/14
+Tegra3 CPU support (http://github.com/danielhk) 2016/2/24
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,110 +26,34 @@ Copyright (C) 2012  James Roberts
 
     <string name="tab_gpu_settings">GPU 设置</string>
 
-    <!-- Performance Settings : GPU settings title -->
-    <string name="gpu_title">GPU</string>
     <!-- Performance Settings : GPU settings sub items -->
     <string name="gpu_vpll_title">Mali 使用 VPLL 时脉</string>
     <string name="gpu_vpll_summary">如果 VPLL 关闭, 频率不一定是准确数值</string>
     <string name="gpu_min_freq_title">最低 GPU 频率</string>
-    <string name="gpu_min_freq_summary" translatable="false">%s</string>
     <string name="gpu_min_freq_volt_title">GPU 最低频率电压</string>
-    <string name="gpu_min_freq_volt_summary" translatable="false">%s</string>
     <string name="gpu_max_freq_title">最高 GPU 频率</string>
-    <string name="gpu_max_freq_summary" translatable="false">%s</string>
     <string name="gpu_max_freq_volt_title">GPU 最高频率电压</string>
-    <string name="gpu_max_freq_volt_summary" translatable="false">%s</string>
 
     <!-- Performance Settings : Set on boot option -->
     <string name="performance_set_on_boot">重启后自动设置</string>
     <string name="performance_set_on_boot_summary">重启后还原当前设置</string>
 
-    <string name="volt_875_mv">875 mV</string>
-    <string name="volt_900_mv">900 mV</string>
-    <string name="volt_925_mv">925 mV</string>
-    <string name="volt_950_mv">950 mV</string>
-    <string name="volt_975_mv">975 mV</string>
-    <string name="volt_1000_mv">1000 mV</string>
-    <string name="volt_1025_mv">1025 mV</string>
-    <string name="volt_1050_mv">1050 mV</string>
-    <string name="volt_1075_mv">1075 mV</string>
-    <string name="volt_1100_mv">1100 mV</string>
-    <string name="volt_1125_mv">1125 mV</string>
-    <string name="volt_1150_mv">1150 mV</string>
-    <string name="volt_1175_mv">1175 mV</string>
-    <string name="volt_1200_mv">1200 mV</string>
-
-    <string name="freq_100_mhz">100 MHz</string>
-    <string name="freq_108_mhz">108 MHz</string>
-    <string name="freq_160_mhz">160 MHz</string>
-    <string name="freq_267_mhz">267 MHz</string>
-    <string name="freq_330_mhz">330 MHz</string>
-    <string name="freq_400_mhz">400 MHz</string>
-    <string name="freq_440_mhz">440 MHz</string>
-
-    <string-array name="gpu_min_voltage" translatable="false">
-        <item>@string/volt_875_mv</item>
-        <item>@string/volt_900_mv</item>
-        <item>@string/volt_925_mv</item>
-        <item>@string/volt_950_mv</item>
-        <item>@string/volt_975_mv</item>
-        <item>@string/volt_1000_mv</item>
-    </string-array>
-    <string-array name="gpu_min_voltage_values" translatable="false">
-        <item>875000</item>
-        <item>900000</item>
-        <item>925000</item>
-        <item>950000</item>
-        <item>975000</item>
-        <item>1000000</item>
-    </string-array>
-
-    <string-array name="gpu_min_freq" translatable="false">
-        <item>@string/freq_108_mhz</item>
-        <item>@string/freq_160_mhz</item>
-    </string-array>
-    <string-array name="gpu_min_freq_values" translatable="false">
-        <item>108</item>
-        <item>160</item>
-    </string-array>
-
-    <string-array name="gpu_max_voltage" translatable="false">
-        <item>@string/volt_1025_mv</item>
-        <item>@string/volt_1050_mv</item>
-        <item>@string/volt_1075_mv</item>
-        <item>@string/volt_1100_mv</item>
-        <item>@string/volt_1125_mv</item>
-        <item>@string/volt_1150_mv</item>
-        <item>@string/volt_1175_mv</item>
-        <item>@string/volt_1200_mv</item>
-    </string-array>
-    <string-array name="gpu_max_voltage_values" translatable="false">
-        <item>1025000</item>
-        <item>1050000</item>
-        <item>1075000</item>
-        <item>1100000</item>
-        <item>1125000</item>
-        <item>1150000</item>
-        <item>1175000</item>
-        <item>1200000</item>
-    </string-array>
-
-    <string-array name="gpu_max_freq" translatable="false">
-        <item>@string/freq_267_mhz</item>
-        <item>@string/freq_330_mhz</item>
-        <item>@string/freq_400_mhz</item>
-        <item>@string/freq_440_mhz</item>
-    </string-array>
-    <string-array name="gpu_max_freq_values" translatable="false">
-        <item>267</item>
-        <item>330</item>
-        <item>400</item>
-        <item>440</item>
-    </string-array>
-
     <!-- Advance Settings : Double tap to wake -->
     <string name="double_tap_wake">双击唤醒</string>
-    <string name="bt_double_tap_wake">启动内核的双击唤醒</string>
+    <string name="dt_double_tap_wake">启动内核的双击唤醒</string>
     <string name="dt_delta_title">双击最大的范围 (像数)</string>
     <string name="dt_timeout_title">双击相隔最长时间 (ms)</string>
+
+    <!-- Tegra3 Settings -->
+    <string name="t_tegra3_settings">Tegra3 设定</string>
+    <string name="gpu_frequency_title">GPU 频率</string>
+    <string name="gpu_voltage_title">GPU 电压</string>
+    <string name="lp_voltage_title">LP核心 电压</string>
+    <string name="emc_voltage_title">eMMC 电压</string>
+    <string name="volt_restore">还原为预设电压数值</string>
+    <string name="empty_voltage_title">(null)</string>
+    <string name="warning">请注意！\n所有电压将会被还原为预设数值，是否确定？</string>
+    <string name="panel_backlight_title">屏幕背光亮度</string>
+    <string name="panel_min_title">屏幕背光最低亮度 (1-30)</string>
+    <string name="panel_max_title">屏幕背光最高亮度 (100-255)</string>
 </resources>
