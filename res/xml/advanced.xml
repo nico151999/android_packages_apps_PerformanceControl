@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
 Performance Control - An Android CPU Control application
 Copyright (C) 2012  James Roberts
+DT2W support (http://github.com/danielhk) 2016/2/24
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,7 +47,7 @@ Copyright (C) 2012  James Roberts
 
         <CheckBoxPreference
             android:key="pref_double_tap_wake"
-            android:title="@string/bt_double_tap_wake" />
+            android:title="@string/dt_double_tap_wake" />
 
         <Preference
             android:key="pref_double_tap_delta"
