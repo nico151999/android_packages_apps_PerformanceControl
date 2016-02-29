@@ -153,17 +153,11 @@ public class CPUSettings extends Fragment
         String mCurrentIo = Helpers.getIOScheduler();
         String mCurMaxSpeed = "-1";
         String mCurMinSpeed = "-1" ;
-        if (new File(DYN_MAX_FREQ_PATH).exists()) {
+
+        if (mIsDynFreq) {
             mCurMaxSpeed = Helpers.readOneLine(DYN_MAX_FREQ_PATH);
-        }
-        if (new File(DYN_MIN_FREQ_PATH).exists()) {
             mCurMinSpeed = Helpers.readOneLine(DYN_MIN_FREQ_PATH);
         } 
-        if ((Integer.valueOf(mCurMaxSpeed) < 0) || (Integer.valueOf(mCurMinSpeed) < 0))
-	{
-            mCurMaxSpeed = Helpers.readOneLine(MAX_FREQ_PATH);
-            mCurMinSpeed = Helpers.readOneLine(MIN_FREQ_PATH);
-        }
 
         if (mIsTegra3) {
             String curTegraMaxSpeed = Helpers.readOneLine(TEGRA_MAX_FREQ_PATH);
@@ -177,6 +171,14 @@ public class CPUSettings extends Fragment
                 // Nothing to do
             }
         }
+        if (Integer.valueOf(mCurMaxSpeed) < 0)
+	{
+            mCurMaxSpeed = Helpers.readOneLine(MAX_FREQ_PATH);
+	}
+        if (Integer.valueOf(mCurMinSpeed) < 0)
+	{
+            mCurMinSpeed = Helpers.readOneLine(MIN_FREQ_PATH);
+	}
 
         mMaxSlider = (SeekBar) view.findViewById(R.id.max_slider);
         mMaxSlider.setMax(mFrequenciesNum);
