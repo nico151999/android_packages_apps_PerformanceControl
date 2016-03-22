@@ -66,6 +66,9 @@ import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.widgets.CustomDrawerLayout;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class MainActivity extends Activity implements Constants, ActivityThemeChangeInterface {
 
     //==================================
@@ -93,7 +96,6 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
     private static boolean mTegra3Supported;
     private static boolean mToolSupported;
     private static boolean mIsLightTheme;
-    private static int DRAWER_MODE = 0;
     private static boolean mVoltageExists;
     private SharedPreferences mPreferences;
     private boolean mIsTabbed = true;
