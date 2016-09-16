@@ -25,6 +25,8 @@ Tegra3 CPU support (http://github.com/danielhk) 2016/2/24
     <string name="zram_size_k">78956</string>
 
     <string name="t_gpu_settings">GPU SETTINGS</string>
+    <string name="navigation_drawer_about">About PerformanceControl</string>
+    <string name="about_message">Mali and Tegra3 Support by: daniel_hk (http://github.com/danielhk)</string>
 
     <!-- Performance Settings : GPU settings title -->
     <string name="gpu_title">GPU</string>

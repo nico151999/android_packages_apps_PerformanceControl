@@ -15,14 +15,15 @@ Copyright (C) 2012  James Roberts
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
-<resources>
-
-    <color name="pc_cat_gray">#ff3b3b3b</color>
-    <color name="pc_light_gray">#ff4d4d4d</color>
-    <color name="pc_gray">#ff6f6f6f</color>
-    <color name="pc_blue">@android:color/holo_blue_light</color>
-    <color name="pc_white">#ffffffff</color>
-    <color name="pc_black">#ff141414</color>
-
-</resources>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+    android:gravity="center_vertical"
+    android:ellipsize="end"
+    android:singleLine="true"
+    android:textColor="?android:attr/textColorPrimary" />

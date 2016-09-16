@@ -56,8 +56,8 @@ import com.brewcrewfoo.performance.fragments.CPUSettings;
 import com.brewcrewfoo.performance.fragments.Gpu;
 import com.brewcrewfoo.performance.fragments.DiskInfo;
 import com.brewcrewfoo.performance.fragments.OOMSettings;
-import com.brewcrewfoo.performance.fragments.TimeInState;
 import com.brewcrewfoo.performance.fragments.Tegra3;
+import com.brewcrewfoo.performance.fragments.TimeInState;
 import com.brewcrewfoo.performance.fragments.Tools;
 import com.brewcrewfoo.performance.fragments.VM;
 import com.brewcrewfoo.performance.fragments.VoltageControlSettings;
@@ -156,7 +156,7 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
             mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
             setUpNavigationDrawer(
-                    findViewById(R.id.pc_navigation_drawer),
+                    mDrawerListView,
                     (CustomDrawerLayout) findViewById(R.id.pc_drawer_layout));
         } else {
 	    setContentView(R.layout.activity_main_tabbed);
@@ -173,13 +173,40 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
         checkForSu();
 
     }
-/*
+
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(true);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
     }
-*/
+    /* Called whenever we call invalidateOptionsMenu() */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerListView);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+         // The action bar home/up action should open or close the drawer.
+         // ActionBarDrawerToggle will take care of this.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle action buttons
+        switch(item.getItemId()) {
+        case R.id.pc_about:
+            String message = "Version:"+ VERSION_NUM + "\n" +
+			     getString(R.string.about_message);
+	    suResultDialog(TAG, message);
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -245,22 +272,27 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                    return;
+
+                invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                    return;
+
+                invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
 
         // Remove or set it to true, if you want to use home to toggle the menu_drawer
-        mDrawerToggle.setDrawerIndicatorEnabled(false);
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
 
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
             mDrawerLayout.openDrawer(mFragmentContainerView);
         }
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        selectItem(mCurrentSelectedPosition);
 
         mDrawerLayout.post(new Runnable() {
             @Override
@@ -268,30 +300,11 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
                 mDrawerToggle.syncState();
             }
         });
-
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        selectItem(mCurrentSelectedPosition);
     }
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
-
-    /**
-     * Restores the action bar after closing the menu_drawer
-     */
-/*
-    public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(this.getTitle());
-    }
-
-    private ActionBar getActionBar() {
-        return this.getActionBar();
-    }*/
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
