@@ -271,7 +271,7 @@ public class Gpu extends PreferenceFragment implements
 	    if (Helpers.isSystemApp(getActivity())) {
 		Helpers.writeOneLine(fname, items[0] +" "+ items[1]);
 	    } else {
-		cmd.su.runWaitFor("busybox echo "+items[0] +" "+ items[1]+" > " + fname);
+		cmd.su.runWaitFor(Helpers.getTOOLBOX() + " echo "+items[0] +" "+ items[1]+" > " + fname);
 	    }
 	}
     }

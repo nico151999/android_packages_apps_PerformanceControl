@@ -24,6 +24,7 @@ import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
 import com.brewcrewfoo.performance.util.FileArrayAdapter;
+import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.Item;
 
 import java.io.File;
@@ -160,7 +161,7 @@ public class iResidualsActivity extends Activity implements Constants, AdapterVi
             ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
             ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_NEGATIVE).setEnabled(false);
 
-            CMDProcessor.CommandResult cr = new CMDProcessor().su.runWaitFor("busybox rm -f " + rpath + "/*");
+            CMDProcessor.CommandResult cr = new CMDProcessor().su.runWaitFor(Helpers.getTOOLBOX() + " rm -f " + rpath + "/*");
             if (cr.success()) {
                 ndel += adapter.getCount();
                 adapter.clear();
@@ -189,7 +190,7 @@ public class iResidualsActivity extends Activity implements Constants, AdapterVi
             ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
             ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_NEGATIVE).setEnabled(false);
 
-            CMDProcessor.CommandResult cr = new CMDProcessor().su.runWaitFor("busybox rm -f " + rpath + "/" + o.getName());
+            CMDProcessor.CommandResult cr = new CMDProcessor().su.runWaitFor(Helpers.getTOOLBOX() + " rm -f " + rpath + "/" + o.getName());
             if (cr.success()) {
                 adapter.remove(o);
                 adapter.notifyDataSetChanged();
@@ -211,7 +212,7 @@ public class iResidualsActivity extends Activity implements Constants, AdapterVi
         @Override
         protected String doInBackground(String... params) {
             CMDProcessor.CommandResult cr = null;
-            cr = new CMDProcessor().su.runWaitFor("busybox echo `busybox find " + rpath + " -type f -name \"*\"`");
+            cr = new CMDProcessor().su.runWaitFor(Helpers.getTOOLBOX() + " echo `busybox find " + rpath + " -type f -name \"*\"`");
             if (cr.success()) {
                 return cr.stdout;
             } else {

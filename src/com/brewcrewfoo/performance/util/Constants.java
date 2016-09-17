@@ -22,7 +22,7 @@ package com.brewcrewfoo.performance.util;
 public interface Constants {
 
     public static final String TAG = "PerformanceControl";
-    public static final String VERSION_NUM = "2.1.5";
+    public static final String VERSION_NUM = "2.1.6";
     //hide flashing kernel/recovery options
     // NO_FLASH=true > hide flash options
     // NO_FLASH=false > show flash options
@@ -216,7 +216,7 @@ public interface Constants {
     public static final String PREF_UNFRREZE = "unfreeze_packs";
 
     //zRam
-    public static final String ISZRAM = "busybox echo `busybox zcat /proc/config.gz | busybox grep ZRAM | busybox grep -v ^#'`";
+    //public static final String ISZRAM = Helpers.TOOLBOX+" echo `"+Helpers.TOOLBOX+" zcat /proc/config.gz|"+Helpers.TOOLBOX+" grep ZRAM|"+Helpers.TOOLBOX+" grep -v ^#'`";
     public static final String ZRAM_DEV = "/dev/block/zram0";
     public static final String ZRAM_SIZE_PATH = "/sys/block/zram0/disksize";
     public static final String ZRAM_RESET_PATH = "/sys/block/zram0/reset";
@@ -253,8 +253,8 @@ public interface Constants {
 
     // init.d script
     public static final String DEFAULT_INITD_FILE = "/system/etc/init.d/00PCdefaults";
-    public static final String REMOUNT_CMD = "busybox mount -o %s,remount /system";
-    public static final String REPLACE_CMD = "busybox sed -i \"s/%s/%s/\" " + DEFAULT_INITD_FILE;
+    public static final String REMOUNT_CMD = " mount -o %s,remount /system";
+    public static final String REPLACE_CMD = " sed -i \"s/%s/%s/\" " + DEFAULT_INITD_FILE;
 
     // Tegra3 Settings
     public static final String TEGRA_MAX_FREQ_PATH = "/sys/module/cpu_tegra/parameters/cpu_user_cap";

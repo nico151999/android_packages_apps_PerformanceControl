@@ -132,7 +132,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
                     for (final Voltage volt : mVoltages) {
                         if (!volt.getSavedMV().equals(volt.getCurrentMv())) {
                             for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
-                                sb.append("busybox echo ").append(volt.getFreq())
+                                sb.append(Helpers.getTOOLBOX() + " echo ").append(volt.getFreq())
                                         .append(" ").append(volt.getSavedMV()).append(" > ")
                                         .append(Helpers.getVoltagePath()
                                                 .replace("cpu0", "cpu" + i)).append(" \n");
@@ -145,7 +145,7 @@ public class VoltageControlSettings extends Fragment implements Constants {
                         b.append(volt.getSavedMV()).append(" ");
                     }
                     for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
-                        sb.append("busybox echo ").append(b.toString()).append(" > ")
+                        sb.append(Helpers.getTOOLBOX() + " echo ").append(b.toString()).append(" > ")
                                 .append(Helpers.getVoltagePath()
                                         .replace("cpu0", "cpu" + i)).append(" \n");
                     }

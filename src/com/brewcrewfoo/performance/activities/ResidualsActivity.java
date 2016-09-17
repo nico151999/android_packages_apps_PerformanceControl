@@ -65,7 +65,7 @@ public class ResidualsActivity extends Activity implements Constants, AdapterVie
                 final StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < adapter.getCount(); i++) {
                     final Item o = adapter.getItem(i);
-                    sb.append("busybox rm -f ").append(o.getName()).append("/*;\n");
+                    sb.append(Helpers.getTOOLBOX() + " rm -f ").append(o.getName()).append("/*;\n");
                 }
                 adapter.clear();
                 linlaHeaderProgress.setVisibility(View.VISIBLE);
@@ -198,7 +198,7 @@ public class ResidualsActivity extends Activity implements Constants, AdapterVie
                 t.append(" ");
             }
             Helpers.get_assetsScript("utils", context, "DIRS=\"" + t.toString() + "\";", "");
-            new CMDProcessor().su.runWaitFor("busybox chmod 750 " + getFilesDir() + "/utils");
+            new CMDProcessor().su.runWaitFor(Helpers.getTOOLBOX() + " chmod 750 " + getFilesDir() + "/utils");
         }
 
         @Override

@@ -47,6 +47,8 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
     private RelativeLayout tools;
     private PropAdapter adapter;
     private String curgov;
+    private String utils = "utils";
+    private String TOOLBOX;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         res = getResources();
         setTheme();
         setContentView(R.layout.prop_view);
+	TOOLBOX = mPreferences.getString("TOOLBOX", "busybox");
 
         packList = (ListView) findViewById(R.id.applist);
         packList.setOnItemClickListener(this);
@@ -66,6 +69,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
         final Switch setOnBoot = (Switch) findViewById(R.id.applyAtBoot);
         setOnBoot.setChecked(mPreferences.getBoolean(GOV_SOB, false));
         curgov = Helpers.readOneLine(GOVERNOR_PATH);
+	if (TOOLBOX.equals("toybox")) utils = "tutils";
         applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -78,7 +82,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
                     } else {
                         sb.append(";").append(p.getName()).append(":").append(p.getVal());
                     }
-                    sbs.append("busybox echo ").append(p.getVal()).append(" > ").append(GOV_SETTINGS_PATH).append(curgov).append("/").append(p.getName()).append(";\n");
+                    sbs.append(TOOLBOX+" echo ").append(p.getVal()).append(" > ").append(GOV_SETTINGS_PATH).append(curgov).append("/").append(p.getName()).append(";\n");
                 }
                 mPreferences.edit().putString(GOV_NAME, curgov).putString(GOV_SETTINGS, sb.toString()).commit();
                 Helpers.shExec(sbs, context, true);
@@ -117,10 +121,19 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
 
         @Override
         protected String doInBackground(String... params) {
-            new CMDProcessor().su.runWaitFor("busybox chmod 750 " + context.getFilesDir() + "/utils");
-            CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor(getFilesDir() + "/utils -govprop " + curgov);
+	    CMDProcessor cmd = new CMDProcessor();
+            cmd.su.runWaitFor(TOOLBOX + " chmod 750 " + context.getFilesDir() + "/" + utils);
+            CMDProcessor.CommandResult cr = cmd.su.runWaitFor(getFilesDir() + "/" + utils + " -govprop " + curgov);
             if (cr.success()) {
-                return cr.stdout;
+                String ret = cr.stdout;
+		if (ret.trim().equals("")) {
+		    // add support for files with 0660 permission
+		    Log.d(TAG, "Try again with permission 0660");
+            	    cr = cmd.su.runWaitFor(getFilesDir() + "/" + utils + " -govprop " + curgov + " 660");
+		    if (cr.success())
+			ret = cr.stdout;
+		}
+		return ret;
             } else {
                 Log.d(TAG, "read governor err: " + cr.stderr);
                 return null;
@@ -129,6 +142,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
 
         @Override
         protected void onPostExecute(String result) {
+            Log.d(TAG, "GetPropOperation::onPostExecute, result=" + result);
             if ((result == null) || (result.length() <= 0)) {
                 finish();
             } else {
@@ -156,7 +170,7 @@ public class GovSetActivity extends Activity implements Constants, AdapterView.O
             linlaHeaderProgress.setVisibility(View.VISIBLE);
             nofiles.setVisibility(View.GONE);
             tools.setVisibility(View.GONE);
-            Helpers.get_assetsScript("utils", context, "", "");
+            Helpers.get_assetsScript(utils, context, "", "");
         }
 
         @Override

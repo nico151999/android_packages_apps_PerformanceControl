@@ -64,6 +64,7 @@ public class DiskInfo extends Fragment implements Constants {
     private String internalsd = "";
     private String externalsd = "";
     private Context context;
+    private String TOOLBOX;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class DiskInfo extends Fragment implements Constants {
         context = getActivity();
         //setRetainInstance(true);
         setHasOptionsMenu(true);
+	TOOLBOX = Helpers.getTOOLBOX();
     }
 
     @Override
@@ -236,8 +238,8 @@ public class DiskInfo extends Fragment implements Constants {
 
     public void set_ex_info(String part, TextView t2, TextView t3, TextView t4) {
         CMDProcessor.CommandResult cr = null;
-        cr = new CMDProcessor().sh.runWaitFor("busybox echo `mount | busybox grep " + part +
-                " | busybox awk '{print $1,$3,$4}'`");
+        cr = new CMDProcessor().sh.runWaitFor(TOOLBOX+" echo `mount|"+TOOLBOX+" grep " + part +
+                " | " + TOOLBOX + " awk '{print $1,$3,$4}'`");
         if (cr.success()) {
             t2.setText(cr.stdout.split(" ")[2].split(",")[0].toUpperCase());
             t3.setText(cr.stdout.split(" ")[0]);
@@ -252,9 +254,9 @@ public class DiskInfo extends Fragment implements Constants {
         set_part_info("/cache", "Cache", cachename, cachetotal, cacheused,
                 cachefree, cachebar, lcache);
 
-        cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox mount | " +
-                "busybox egrep -v \"asec|android_secure|sdcard1|external_sd|sd-ext|media_rw\" | " +
-                "busybox egrep -i \"sdcard|sdcard0\" | busybox awk '{print $3}'`");
+        cr = new CMDProcessor().sh.runWaitFor(TOOLBOX + " echo `" + TOOLBOX + " mount | " +
+                TOOLBOX + " egrep -v \"asec|android_secure|sdcard1|external_sd|sd-ext|media_rw\" | " +
+                TOOLBOX + " egrep -i \"sdcard|sdcard0\" | " + TOOLBOX + " awk '{print $3}'`");
 
         if (cr.success() && set_part_info(cr.stdout, "SD card 1", sd1name, sd1total,
                 sd1used, sd1free, sd1bar, lsd1)) {
@@ -264,9 +266,9 @@ public class DiskInfo extends Fragment implements Constants {
         String sep = "";
         if (!internalsd.equals("")) sep = "|";
 
-        cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox mount | busybox egrep -v " +
-                "\"asec|media_rw|android_secure" + sep + internalsd + "\" | busybox egrep -i \"" +
-                "external_sd|sdcard1|sd-ext\" | busybox awk '{print $3}'`");
+        cr = new CMDProcessor().sh.runWaitFor(TOOLBOX+" echo `"+TOOLBOX+" mount | "+TOOLBOX + " egrep -v " +
+                "\"asec|media_rw|android_secure" + sep + internalsd + "\" | " + TOOLBOX + " egrep -i \"" +
+                "external_sd|sdcard1|sd-ext\" | " + TOOLBOX + " awk '{print $3}'`");
 
         if (cr.success() && set_part_info(cr.stdout, "SD card 2", sd2name, sd2total, sd2used,
                 sd2free, sd2bar, lsd2)) {

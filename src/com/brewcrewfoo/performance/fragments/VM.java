@@ -297,7 +297,7 @@ public class VM extends PreferenceFragment implements SharedPreferences.OnShared
                             Helpers.writeOneLine(path, Integer.toString(newProgress));
                         } else {
                             new CMDProcessor().su.runWaitFor(
-                                    "busybox echo " + newProgress + " > " + path);
+                                    Helpers.getTOOLBOX() + " echo " + newProgress + " > " + path);
                         }
                         final SharedPreferences.Editor editor = mPreferences.edit();
                         editor.putInt(key, newProgress);

@@ -109,14 +109,15 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mUserLearnedDrawer = mPreferences.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+	Helpers.setTOOLBOX(mPreferences.getString("TOOLBOX", "busybox"));
+
         mVoltageExists = Helpers.voltageFileExists();
 
 	mGpuSupported = Helpers.maliGpuExists();
         mTegra3Supported = Helpers.tegra3Exists();
 	mToolSupported = !getResources().getBoolean(R.bool.config_showPerformanceOnly);
-
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mUserLearnedDrawer = mPreferences.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
 	setTheme();
 
@@ -563,6 +564,7 @@ public class MainActivity extends Activity implements Constants, ActivityThemeCh
                             String message = getString(R.string.su_success_message);
                             SharedPreferences.Editor e = mPreferences.edit();
                             e.putBoolean("rootcanceled", false);
+			    e.putString("TOOLBOX", Helpers.getTOOLBOX());
                             e.commit();
                             suResultDialog(title, message);
                         }

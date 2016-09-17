@@ -95,6 +95,7 @@ public class Advanced extends PreferenceFragment
     private String sreadahead;
     private String BLN_PATH;
     private Context context;
+    private String TOOLBOX;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +104,7 @@ public class Advanced extends PreferenceFragment
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mPreferences.registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.xml.advanced);
+	TOOLBOX = mPreferences.getString("TOOLBOX", "busybox");
 
         sreadahead = getResources().getString(R.string.ps_read_ahead, "");
 
@@ -227,13 +229,13 @@ public class Advanced extends PreferenceFragment
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(DSYNC_PATH, "1");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DSYNC_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 1 > " + DSYNC_PATH);
                 }
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(DSYNC_PATH, "0");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 0 > " + DSYNC_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 0 > " + DSYNC_PATH);
                 }
             }
             return true;
@@ -247,13 +249,13 @@ public class Advanced extends PreferenceFragment
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(BL_TOUCH_ON_PATH, "1");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 1 > " + BL_TOUCH_ON_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 1 > " + BL_TOUCH_ON_PATH);
                 }
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(BL_TOUCH_ON_PATH, "0");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 0 > " + BL_TOUCH_ON_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 0 > " + BL_TOUCH_ON_PATH);
                 }
             }
             return true;
@@ -262,13 +264,13 @@ public class Advanced extends PreferenceFragment
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(BLN_PATH, "1");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 1 > " + BLN_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 1 > " + BLN_PATH);
                 }
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(BLN_PATH, "0");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 0 > " + BLN_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 0 > " + BLN_PATH);
                 }
             }
             return true;
@@ -277,13 +279,13 @@ public class Advanced extends PreferenceFragment
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(PFK_HOME_ENABLED, "1");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 1 > " + PFK_HOME_ENABLED);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 1 > " + PFK_HOME_ENABLED);
                 }
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(PFK_HOME_ENABLED, "0");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 0 > " + PFK_HOME_ENABLED);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 0 > " + PFK_HOME_ENABLED);
                 }
             }
             return true;
@@ -292,13 +294,13 @@ public class Advanced extends PreferenceFragment
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(PFK_MENUBACK_ENABLED, "1");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 1 > " + PFK_MENUBACK_ENABLED);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 1 > " + PFK_MENUBACK_ENABLED);
                 }
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(PFK_MENUBACK_ENABLED, "0");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 0 > " + PFK_MENUBACK_ENABLED);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 0 > " + PFK_MENUBACK_ENABLED);
                 }
             }
             return true;
@@ -339,14 +341,14 @@ public class Advanced extends PreferenceFragment
                     Helpers.writeOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH, "1");
                 } else {
                     new CMDProcessor().su.runWaitFor(
-                            "busybox echo 1 > " + DYNAMIC_DIRTY_WRITEBACK_PATH);
+                            TOOLBOX + " echo 1 > " + DYNAMIC_DIRTY_WRITEBACK_PATH);
                 }
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(DYNAMIC_DIRTY_WRITEBACK_PATH, "0");
                 } else {
                     new CMDProcessor().su.runWaitFor(
-                            "busybox echo 0 > " + DYNAMIC_DIRTY_WRITEBACK_PATH);
+                            TOOLBOX + " echo 0 > " + DYNAMIC_DIRTY_WRITEBACK_PATH);
                 }
             }
             return true;
@@ -372,14 +374,14 @@ public class Advanced extends PreferenceFragment
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(DOUBLE_TAB_WAKE_PATH, "1");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 1 > " + DOUBLE_TAB_WAKE_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 1 > " + DOUBLE_TAB_WAKE_PATH);
                 }
 		editor.putBoolean(PREF_DOUBLE_TAB_WAKE, true);
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(DOUBLE_TAB_WAKE_PATH, "0");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 0 > " + DOUBLE_TAB_WAKE_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 0 > " + DOUBLE_TAB_WAKE_PATH);
                 }
 		editor.putBoolean(PREF_DOUBLE_TAB_WAKE, false);
             }
@@ -408,7 +410,7 @@ public class Advanced extends PreferenceFragment
         if (key.equals(PREF_READ_AHEAD)) {
             final String values = mReadAhead.getValue();
             if (!values.equals(Helpers.readOneLine(READ_AHEAD_PATH))) {
-                new CMDProcessor().su.runWaitFor("busybox echo " + values + " > " + READ_AHEAD_PATH);
+                new CMDProcessor().su.runWaitFor(TOOLBOX + " echo " + values + " > " + READ_AHEAD_PATH);
             }
             mReadAhead.setSummary(sreadahead + values + " kb");
         } else if (key.equals(PREF_BLTIMEOUT)) {
@@ -492,20 +494,20 @@ public class Advanced extends PreferenceFragment
 /* use init.d script */
 	        final CMDProcessor cmd = new CMDProcessor();
 		// remount /system to rw
-		cmd.su.runWaitFor(String.format(REMOUNT_CMD, "rw"));
+		cmd.su.runWaitFor(String.format(TOOLBOX + REMOUNT_CMD, "rw"));
 		if (sharedPreferences.getBoolean(key, false)) {
 		    // replace the DT_WAKE_VAL, DT_DELTA_VAL & DT_TIMEOUT_VAL
-		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_WAKE_VAL\\=.*", "DT_WAKE_VAL="+wake));
-		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_DELTA_VAL\\=.*", "DT_DELTA_VAL="+delta));
-		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_TIMEOUT_VAL\\=.*", "DT_TIMEOUT_VAL="+timeout));
+		    cmd.su.runWaitFor(String.format(TOOLBOX + REPLACE_CMD, "DT_WAKE_VAL\\=.*", "DT_WAKE_VAL="+wake));
+		    cmd.su.runWaitFor(String.format(TOOLBOX + REPLACE_CMD, "DT_DELTA_VAL\\=.*", "DT_DELTA_VAL="+delta));
+		    cmd.su.runWaitFor(String.format(TOOLBOX + REPLACE_CMD, "DT_TIMEOUT_VAL\\=.*", "DT_TIMEOUT_VAL="+timeout));
 		} else {
 		    // disable the DT_WAKE_VAL, DT_DELTA_VAL & DT_TIMEOUT_VAL
-		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_WAKE_VAL\\=.*", "DT_WAKE_VAL=-1"));
-		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_DELTA_VAL\\=.*", "DT_DELTA_VAL=-1"));
-		    cmd.su.runWaitFor(String.format(REPLACE_CMD, "DT_TIMEOUT_VAL\\=.*", "DT_TIMEOUT_VAL=-1"));
+		    cmd.su.runWaitFor(String.format(TOOLBOX + REPLACE_CMD, "DT_WAKE_VAL\\=.*", "DT_WAKE_VAL=-1"));
+		    cmd.su.runWaitFor(String.format(TOOLBOX + REPLACE_CMD, "DT_DELTA_VAL\\=.*", "DT_DELTA_VAL=-1"));
+		    cmd.su.runWaitFor(String.format(TOOLBOX + REPLACE_CMD, "DT_TIMEOUT_VAL\\=.*", "DT_TIMEOUT_VAL=-1"));
 		}
 		// remount /system back to ro
-		cmd.su.runWaitFor(String.format(REMOUNT_CMD, "ro"));
+		cmd.su.runWaitFor(String.format(TOOLBOX + REMOUNT_CMD, "ro"));
 	    } else {
 		if (sharedPreferences.getBoolean(key, false)) {
 		    editor.putBoolean(PREF_DOUBLE_TAB_WAKE, wake.equals("1"))
@@ -616,7 +618,7 @@ public class Advanced extends PreferenceFragment
                             Helpers.writeOneLine(path, Integer.toString(newProgress));
                         } else {
                             new CMDProcessor().su.runWaitFor(
-                                    "busybox echo " + newProgress + " > " + path);
+                                    TOOLBOX + " echo " + newProgress + " > " + path);
                         }
                         final SharedPreferences.Editor editor = mPreferences.edit();
                         editor.putInt(key, newProgress);

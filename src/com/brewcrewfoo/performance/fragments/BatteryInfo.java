@@ -63,6 +63,7 @@ public class BatteryInfo extends Fragment
     private String mFastChargePath;
     private Context context;
     private boolean mBattIconShown;
+    private String TOOLBOX;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class BatteryInfo extends Fragment
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+	TOOLBOX = mPreferences.getString("TOOLBOX", "busybox");
     }
 
     @Override
@@ -214,11 +216,11 @@ public class BatteryInfo extends Fragment
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 new CMDProcessor().su.runWaitFor(
-                                                        "busybox echo 1 > " + mFastChargePath);
+                                                        TOOLBOX + " echo 1 > " + mFastChargePath);
                                             }
                                         }).create().show();
                     } else {
-                        new CMDProcessor().su.runWaitFor("busybox echo 0 > " + mFastChargePath);
+                        new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 0 > " + mFastChargePath);
                     }
                 }
             });
@@ -244,7 +246,7 @@ public class BatteryInfo extends Fragment
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         // we have a break now, write the values..
-        new CMDProcessor().su.runWaitFor("busybox echo " + seekBar.getProgress() + " > " + BLX_PATH);
+        new CMDProcessor().su.runWaitFor(TOOLBOX + " echo " + seekBar.getProgress() + " > " + BLX_PATH);
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putInt(PREF_BLX, seekBar.getProgress()).commit();
     }

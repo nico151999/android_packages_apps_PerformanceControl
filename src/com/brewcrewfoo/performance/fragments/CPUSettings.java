@@ -58,6 +58,8 @@ import java.util.List;
 public class CPUSettings extends Fragment
         implements SeekBar.OnSeekBarChangeListener, Constants {
 
+    private String TOOLBOX;
+
     private SeekBar mMaxSlider;
     private SeekBar mMinSlider;
     private Spinner mGovernor;
@@ -105,6 +107,7 @@ public class CPUSettings extends Fragment
         context = getActivity();
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         setHasOptionsMenu(true);
+	TOOLBOX = mPreferences.getString("TOOLBOX", "busybox");
     }
 
     @Override
@@ -305,19 +308,19 @@ public class CPUSettings extends Fragment
         } else {
             final StringBuilder sb = new StringBuilder();
             for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
-                sb.append("busybox echo ").append(mMaxFreqSetting).append(" > ")
+                sb.append(TOOLBOX + " echo ").append(mMaxFreqSetting).append(" > ")
                         .append(MAX_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
-                sb.append("busybox echo ").append(mMinFreqSetting).append(" > ")
+                sb.append(TOOLBOX + " echo ").append(mMinFreqSetting).append(" > ")
                         .append(MIN_FREQ_PATH.replace("cpu0", "cpu" + i)).append(";\n");
             }
             if (mIsTegra3) {
-                sb.append("busybox echo ").append(mMaxFreqSetting).append(" > ")
+                sb.append(TOOLBOX + " echo ").append(mMaxFreqSetting).append(" > ")
                         .append(TEGRA_MAX_FREQ_PATH).append(";\n");
             }
             if (mIsDynFreq) {
-                sb.append("busybox echo ").append(mMaxFreqSetting).append(" > ")
+                sb.append(TOOLBOX + " echo ").append(mMaxFreqSetting).append(" > ")
                         .append(DYN_MAX_FREQ_PATH).append(";\n");
-                sb.append("busybox echo ").append(mMinFreqSetting).append(" > ")
+                sb.append(TOOLBOX + " echo ").append(mMinFreqSetting).append(" > ")
                         .append(DYN_MIN_FREQ_PATH).append(";\n");
             }
             Helpers.shExec(sb, context, true);
@@ -332,7 +335,7 @@ public class CPUSettings extends Fragment
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(GOVERNOR_PATH.replace("cpu0", "cpu" + i), selected);
                 } else {
-                    sb.append("busybox echo ").append(selected).append(" > ")
+                    sb.append(TOOLBOX + " echo ").append(selected).append(" > ")
                             .append(GOVERNOR_PATH.replace("cpu0", "cpu" + i)).append(";\n");
                 }
             }
@@ -357,7 +360,7 @@ public class CPUSettings extends Fragment
                     if (Helpers.isSystemApp(getActivity())) {
                         Helpers.writeOneLine(aIO_SCHEDULER_PATH, selected);
                     } else {
-                        sb.append("busybox echo ").append(selected).append(" > ")
+                        sb.append(TOOLBOX + " echo ").append(selected).append(" > ")
                                 .append(aIO_SCHEDULER_PATH).append(";\n");
                     }
                 }

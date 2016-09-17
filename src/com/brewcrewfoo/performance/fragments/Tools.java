@@ -69,6 +69,9 @@ public class Tools extends PreferenceFragment implements
     private Preference mResidualFiles;
     private Preference mOptimDB;
     private Context context;
+    private String fix_permissions = "fix_permissions";
+    private String sql_optimize = "sql_optimize";
+    private String TOOLBOX;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,7 @@ public class Tools extends PreferenceFragment implements
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mPreferences.registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.xml.tools);
+	TOOLBOX = mPreferences.getString("TOOLBOX", "busybox");
 
         mResidualFiles = findPreference(RESIDUAL_FILES);
         mOptimDB = findPreference(PREF_OPTIM_DB);
@@ -99,6 +103,10 @@ public class Tools extends PreferenceFragment implements
             PreferenceCategory hideCat = (PreferenceCategory) findPreference("category_freezer");
             getPreferenceScreen().removePreference(hideCat);
         }
+	if (TOOLBOX.equals("toybox")) {
+	    fix_permissions = "tfix_permissions";
+	    sql_optimize = "tsql_optimize";
+	}
         setRetainInstance(true);
         setHasOptionsMenu(true);
     }
@@ -289,9 +297,9 @@ public class Tools extends PreferenceFragment implements
         @Override
         protected String doInBackground(String... params) {
             if (Helpers.isSystemApp(getActivity())) {
-                new CMDProcessor().sh.runWaitFor(context.getFilesDir() + "/fix_permissions");
+                new CMDProcessor().sh.runWaitFor(context.getFilesDir() + "/" + fix_permissions);
             } else {
-                new CMDProcessor().su.runWaitFor(context.getFilesDir() + "/fix_permissions");
+                new CMDProcessor().su.runWaitFor(context.getFilesDir() + "/" + fix_permissions);
             }
             return null;
         }
@@ -306,17 +314,18 @@ public class Tools extends PreferenceFragment implements
 
         @Override
         protected void onPreExecute() {
+
             isrun = true;
             tip = 1;
             progressDialog = ProgressDialog.show(context,
                     getString(R.string.fix_perms_title), getString(R.string.wait));
-            Helpers.get_assetsScript("fix_permissions", context, "#", "");
+            Helpers.get_assetsScript(fix_permissions, context, "#", "");
             if (Helpers.isSystemApp(getActivity())) {
                 new CMDProcessor().sh.runWaitFor(
-                        "busybox chmod 750 " + context.getFilesDir() + "/fix_permissions");
+                        TOOLBOX + " chmod 750 " + context.getFilesDir() + "/" + fix_permissions);
             } else {
                 new CMDProcessor().su.runWaitFor(
-                        "busybox chmod 750 " + context.getFilesDir() + "/fix_permissions");
+                        TOOLBOX + " chmod 750 " + context.getFilesDir() + "/" + fix_permissions);
             }
         }
 
@@ -343,8 +352,8 @@ public class Tools extends PreferenceFragment implements
         @Override
         protected String doInBackground(String... params) {
             final StringBuilder sb = new StringBuilder();
-            sb.append("busybox rm -rf /data/dalvik-cache/*\n");
-            sb.append("busybox rm -rf /cache/*\n");
+            sb.append(TOOLBOX + " rm -rf /data/dalvik-cache/*\n");
+            sb.append(TOOLBOX + " rm -rf /cache/*\n");
             sb.append("reboot\n");
             Helpers.shExec(sb, context, true);
             return null;
@@ -389,9 +398,9 @@ public class Tools extends PreferenceFragment implements
         @Override
         protected String doInBackground(String... params) {
             if (Helpers.isSystemApp(getActivity())) {
-                new CMDProcessor().sh.runWaitFor(context.getFilesDir() + "/sql_optimize");
+                new CMDProcessor().sh.runWaitFor(context.getFilesDir() + "/" + sql_optimize);
             } else {
-                new CMDProcessor().su.runWaitFor(context.getFilesDir() + "/sql_optimize");
+                new CMDProcessor().su.runWaitFor(context.getFilesDir() + "/" + sql_optimize);
             }
             return null;
         }
@@ -412,14 +421,14 @@ public class Tools extends PreferenceFragment implements
                     context, getString(R.string.optim_db_title), getString(R.string.wait));
             mPreferences.edit().putLong(PREF_OPTIM_DB, System.currentTimeMillis()).commit();
             Helpers.get_assetsBinary("sqlite3", context);
-            Helpers.get_assetsScript("sql_optimize", context, "busybox chmod 750 " +
+            Helpers.get_assetsScript(sql_optimize, context, TOOLBOX + " chmod 750 " +
                     context.getFilesDir() + "/sqlite3", "");
             if (Helpers.isSystemApp(getActivity())) {
                 new CMDProcessor().sh.runWaitFor(
-                        "busybox chmod 750 " + context.getFilesDir() + "/sql_optimize");
+                        TOOLBOX + " chmod 750 " + context.getFilesDir() + "/" + sql_optimize);
             } else {
                 new CMDProcessor().su.runWaitFor(
-                        "busybox chmod 750 " + context.getFilesDir() + "/sql_optimize");
+                        TOOLBOX + " chmod 750 " + context.getFilesDir() + "/" + sql_optimize);
             }
         }
 

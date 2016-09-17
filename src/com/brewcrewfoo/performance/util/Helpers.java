@@ -43,6 +43,7 @@ import java.io.InputStream;
 
 public class Helpers implements Constants {
 
+    private static String TOOLBOX = "busybox";
     private static String mVoltagePath;
 
     /**
@@ -77,18 +78,42 @@ public class Helpers implements Constants {
     public static boolean checkBusybox() {
         if (!new File("/system/bin/busybox").exists() && !new File("/system/xbin/busybox").exists()) {
             Log.e(TAG, "Busybox not in xbin or bin!");
-            return false;
+            if (!new File("/system/bin/toybox").exists() && !new File("/system/xbin/toybox").exists()) {
+		Log.e(TAG, "Toybox not in xbin or bin!");
+                return false;
+	    }
+	    TOOLBOX = "toybox";
+            Log.d(TAG, "check Toolbox:" + TOOLBOX);
         }
         try {
-            if (!new CMDProcessor().su.runWaitFor("busybox mount").success()) {
-                Log.e(TAG, " Busybox is there but it is borked! ");
-                return false;
-            }
+	    if (!new CMDProcessor().su.runWaitFor(TOOLBOX + " mount").success()) {
+		Log.e(TAG, TOOLBOX + " is there but not fully support! ");
+		return false;
+	    }
         } catch (final NullPointerException e) {
             Log.e(TAG, e.getMessage());
             return false;
         }
         return true;
+    }
+
+    /**
+     * Sets the TOOLBOX string
+     *
+     * @param toolbox
+     */
+    public static void setTOOLBOX(String toolbox) {
+        Log.d(TAG, "set TOOLBOX: " + toolbox);
+        TOOLBOX = toolbox;
+    }
+
+    /**
+     * Gets the TOOLBOX string
+     *
+     * @return TOOLBOX
+     */
+    public static String getTOOLBOX() {
+        return TOOLBOX;
     }
 
     /**
@@ -132,7 +157,7 @@ public class Helpers implements Constants {
                 return true;
             }
         }
-        return (cmd.su.runWaitFor("busybox mount -o remount," + mount + " /system").success());
+        return (cmd.su.runWaitFor(TOOLBOX + " mount -o remount," + mount + " /system").success());
     }
 
     /**
@@ -404,7 +429,7 @@ public class Helpers implements Constants {
 
     public static String binExist(String b) {
         CMDProcessor.CommandResult cr = null;
-        cr = new CMDProcessor().sh.runWaitFor("busybox which " + b);
+        cr = new CMDProcessor().sh.runWaitFor(TOOLBOX + " which " + b);
         if (cr.success()) {
             return cr.stdout;
         } else {
@@ -414,7 +439,7 @@ public class Helpers implements Constants {
 
     public static String getCachePartition() {
         CMDProcessor.CommandResult cr = null;
-        cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox mount | busybox grep cache | busybox cut -d' ' -f1`");
+        cr = new CMDProcessor().sh.runWaitFor(TOOLBOX+" echo `"+TOOLBOX+" mount|"+TOOLBOX+"grep cache|"+TOOLBOX+" cut -d' ' -f1`");
         if (cr.success() && !cr.stdout.equals("")) {
             return cr.stdout;
         } else {
@@ -424,7 +449,7 @@ public class Helpers implements Constants {
 
     public static long getTotMem() {
         long v = 0;
-        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor("busybox echo `busybox grep MemTot /proc/meminfo | busybox grep -E --only-matching '[[:digit:]]+'`");
+        CMDProcessor.CommandResult cr = new CMDProcessor().sh.runWaitFor(TOOLBOX + " echo `" + TOOLBOX + " grep MemTot /proc/meminfo|" + TOOLBOX + " grep -E --only-matching '[[:digit:]]+'`");
         if (cr.success()) {
             try {
                 v = (long) Integer.parseInt(cr.stdout) * 1024;
@@ -442,9 +467,9 @@ public class Helpers implements Constants {
     public static String shExec(StringBuilder s, Context c, Boolean su) {
         get_assetsScript("run", c, s.toString(), "");
         if (isSystemApp(c)) {
-            new CMDProcessor().sh.runWaitFor("busybox chmod 750 " + c.getFilesDir() + "/run");
+            new CMDProcessor().sh.runWaitFor(TOOLBOX + " chmod 750 " + c.getFilesDir() + "/run");
         } else {
-            new CMDProcessor().su.runWaitFor("busybox chmod 750 " + c.getFilesDir() + "/run");
+            new CMDProcessor().su.runWaitFor(TOOLBOX + " chmod 750 " + c.getFilesDir() + "/run");
         }
         CMDProcessor.CommandResult cr = null;
         if (su && !isSystemApp(c))

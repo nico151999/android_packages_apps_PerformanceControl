@@ -83,7 +83,7 @@ public class PackActivity extends Activity implements Constants, OnItemClickList
             @Override
             public void onClick(View arg0) {
                 mPreferences.edit().putString(pack_pref, packNames.getText().toString()).commit();
-                new CMDProcessor().su.runWaitFor("busybox echo " + mPreferences.getString(pack_pref, Helpers.readOneLine(pack_path)) + " > " + pack_path);
+                new CMDProcessor().su.runWaitFor(Helpers.getTOOLBOX()+" echo "+mPreferences.getString(pack_pref, Helpers.readOneLine(pack_path))+" > "+pack_path);
                 finish();
             }
         });
@@ -100,9 +100,9 @@ public class PackActivity extends Activity implements Constants, OnItemClickList
         protected String doInBackground(String... params) {
             CMDProcessor.CommandResult cr = null;
             if (tip) {
-                cr = new CMDProcessor().sh.runWaitFor("busybox echo `pm list packages -s | cut -d':' -f2`");
+                cr = new CMDProcessor().sh.runWaitFor(Helpers.getTOOLBOX() + " echo `pm list packages -s | cut -d':' -f2`");
             } else {
-                cr = new CMDProcessor().sh.runWaitFor("busybox echo `pm list packages -3 | cut -d':' -f2`");
+                cr = new CMDProcessor().sh.runWaitFor(Helpers.getTOOLBOX() + " echo `pm list packages -3 | cut -d':' -f2`");
             }
             if (cr.success() && !cr.stdout.equals("")) {
                 return cr.stdout;

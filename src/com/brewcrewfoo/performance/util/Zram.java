@@ -70,7 +70,7 @@ public class Zram implements Constants {
     public void setDiskSize(int v) throws Exception {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < Helpers.getNumOfCpus(); i++) {
-            sb.append("busybox echo ").append(String.valueOf(v * 1024 * 1024)).append(" > ")
+            sb.append(Helpers.getTOOLBOX() + " echo ").append(String.valueOf(v * 1024 * 1024)).append(" > ")
                     .append(ZRAM_SIZE_PATH.replace("zram0", "zram" + i));
         }
         //Helpers.shExec(sb,c);

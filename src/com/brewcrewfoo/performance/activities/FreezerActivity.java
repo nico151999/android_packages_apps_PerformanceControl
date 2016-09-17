@@ -29,6 +29,7 @@ import com.brewcrewfoo.performance.R;
 import com.brewcrewfoo.performance.util.ActivityThemeChangeInterface;
 import com.brewcrewfoo.performance.util.CMDProcessor;
 import com.brewcrewfoo.performance.util.Constants;
+import com.brewcrewfoo.performance.util.Helpers;
 import com.brewcrewfoo.performance.util.PackAdapter;
 
 
@@ -123,12 +124,12 @@ public class FreezerActivity extends Activity implements Constants, AdapterView.
         protected String doInBackground(String... params) {
             CMDProcessor.CommandResult cr;
             if (!freeze) {
-                cr = new CMDProcessor().sh.runWaitFor("busybox echo `pm list packages -d | cut -d':' -f2`");
+                cr = new CMDProcessor().sh.runWaitFor(Helpers.getTOOLBOX() + " echo `pm list packages -d | cut -d':' -f2`");
             } else {
                 if (packs.equals("sys")) {
-                    cr = new CMDProcessor().sh.runWaitFor("busybox echo `pm list packages -s -e | cut -d':' -f2`");
+                    cr = new CMDProcessor().sh.runWaitFor(Helpers.getTOOLBOX() + " echo `pm list packages -s -e | cut -d':' -f2`");
                 } else {
-                    cr = new CMDProcessor().sh.runWaitFor("busybox echo `pm list packages -3 -e | cut -d':' -f2`");
+                    cr = new CMDProcessor().sh.runWaitFor(Helpers.getTOOLBOX() + " echo `pm list packages -3 -e | cut -d':' -f2`");
                 }
             }
             if (cr.success() && !cr.stdout.equals(""))

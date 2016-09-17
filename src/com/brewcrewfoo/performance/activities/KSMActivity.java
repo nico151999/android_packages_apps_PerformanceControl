@@ -177,8 +177,8 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
                     return;
                 }
 
-                new CMDProcessor().su.runWaitFor("busybox echo " + i1 + " > " + KSM_PAGESTOSCAN_PATH);
-                new CMDProcessor().su.runWaitFor("busybox echo " + i2 + " > " + KSM_SLEEP_PATH);
+                new CMDProcessor().su.runWaitFor(Helpers.getTOOLBOX() + " echo " + i1 + " > " + KSM_PAGESTOSCAN_PATH);
+                new CMDProcessor().su.runWaitFor(Helpers.getTOOLBOX() + " echo " + i2 + " > " + KSM_SLEEP_PATH);
                 mPreferences.edit()
                         .putString("pref_ksm_pagetoscan", String.valueOf(i1))
                         .putString("pref_ksm_sleep", String.valueOf(i2))
@@ -196,9 +196,9 @@ public class KSMActivity extends Activity implements Constants, SeekBar.OnSeekBa
                     public void run() {
                         final String vlast = Helpers.readOneLine(KSM_RUN_PATH);
                         final StringBuilder sb = new StringBuilder();
-                        sb.append("busybox echo 0 > ").append(KSM_RUN_PATH).append(";\n").append("sleep 0.5;\n");
-                        sb.append("busybox echo 2 > ").append(KSM_RUN_PATH).append(";\n").append("sleep 0.5;\n");
-                        sb.append("busybox echo ").append(vlast).append(" > ").append(KSM_RUN_PATH).append(";\n");
+                        sb.append(Helpers.getTOOLBOX() + " echo 0 > ").append(KSM_RUN_PATH).append(";\n").append("sleep 0.5;\n");
+                        sb.append(Helpers.getTOOLBOX() + " echo 2 > ").append(KSM_RUN_PATH).append(";\n").append("sleep 0.5;\n");
+                        sb.append(Helpers.getTOOLBOX() + " echo ").append(vlast).append(" > ").append(KSM_RUN_PATH).append(";\n");
                         Helpers.shExec(sb, context, true);
 
                     }

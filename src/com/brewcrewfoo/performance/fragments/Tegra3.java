@@ -88,6 +88,7 @@ public class Tegra3 extends PreferenceFragment
     private CheckBoxPreference mGpuVoltageSOB;
     private CheckBoxPreference mLpVoltageSOB;
     private CheckBoxPreference mEmcVoltageSOB;
+    private String TOOLBOX;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,7 @@ public class Tegra3 extends PreferenceFragment
 	mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 	mPreferences.registerOnSharedPreferenceChangeListener(this);
 	addPreferencesFromResource(R.xml.tegra3_settings);
+	TOOLBOX = mPreferences.getString("TOOLBOX", "busybox");
 
 	mGpuMaxFreqPref = findPreference(PREF_GPU_MAX_FREQ);
 	mGpuMaxFreq = Helpers.readOneLine(TEGRA_GPU_MAX_FREQ_PATH);
@@ -430,7 +432,7 @@ public class Tegra3 extends PreferenceFragment
 	    if (val < MIN_BL_LOWEST) val = MIN_BL_LOWEST;
 	    if (val > MIN_BL_HIGHEST) val = MIN_BL_HIGHEST;
 	    mMinBacklight = Integer.toString(val);
-	    cmd.su.runWaitFor("busybox echo "+mMinBacklight+" > "+TEGRA_MIN_BACKLIGHT_PATH);
+	    cmd.su.runWaitFor(TOOLBOX+" echo "+mMinBacklight+" > "+TEGRA_MIN_BACKLIGHT_PATH);
 	    mPanelMinBLPref.setText(mMinBacklight);
 	    String title = getString(R.string.panel_min_title) + ": " + mMinBacklight;
 	    mPanelMinBLPref.setTitle(title);
@@ -442,7 +444,7 @@ public class Tegra3 extends PreferenceFragment
 	    if (val < MAX_BL_LOWEST) val = MAX_BL_LOWEST;
 	    if (val > MAX_BL_HIGHEST) val = MAX_BL_HIGHEST;
 	    mMaxBacklight = Integer.toString(val);
-	    cmd.su.runWaitFor("busybox echo "+mMaxBacklight+" > "+TEGRA_MAX_BACKLIGHT_PATH);
+	    cmd.su.runWaitFor(TOOLBOX+" echo "+mMaxBacklight+" > "+TEGRA_MAX_BACKLIGHT_PATH);
 	    mPanelMaxBLPref.setText(mMaxBacklight);
 	    String title = getString(R.string.panel_max_title) + ": " + mMaxBacklight;
 	    mPanelMaxBLPref.setTitle(title);
@@ -556,7 +558,7 @@ public class Tegra3 extends PreferenceFragment
 				if (freq == null) {
 				// write Max Freq to sysfs
 				    mGpuMaxFreq = value;
-				    new CMDProcessor().su.runWaitFor("busybox echo "+value+" > "+path);
+				    new CMDProcessor().su.runWaitFor(TOOLBOX+" echo "+value+" > "+path);
 				    pref.setSummary(value + "  MHz");
 				} else {
 				    setVoltages(volts, freq, value, path);
@@ -592,7 +594,7 @@ public class Tegra3 extends PreferenceFragment
 	// write the voltage to sysfs
 	if (volts == null) return;
 	final StringBuilder sb = new StringBuilder();
-	sb.append("busybox echo ");
+	sb.append(TOOLBOX+" echo ");
 	for (final Voltage volt : volts) {
 	    if ((freq != null) && volt.getFreq().equals(freq))
 		volt.setCurrentMV(value);

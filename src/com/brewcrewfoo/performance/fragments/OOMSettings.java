@@ -94,6 +94,7 @@ public class OOMSettings extends PreferenceFragment
     private Preference mKSMsettings;
 
     private Boolean ispm;
+    private String TOOLBOX;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,7 @@ public class OOMSettings extends PreferenceFragment
         mPreferences.registerOnSharedPreferenceChangeListener(this);
         addPreferencesFromResource(R.xml.oom_settings);
 
+	TOOLBOX = mPreferences.getString("TOOLBOX", "busybox");
         values = Helpers.readOneLine(MINFREE_PATH).split(",");
 
         mForegroundApp = findPreference(OOM_FOREGROUND_APP);
@@ -229,7 +231,7 @@ public class OOMSettings extends PreferenceFragment
             if (Helpers.isSystemApp(getActivity())) {
                 Helpers.writeOneLine(MINFREE_PATH, Verylight);
             } else {
-                new CMDProcessor().su.runWaitFor("busybox echo " + Verylight + " > " + MINFREE_PATH);
+                new CMDProcessor().su.runWaitFor(TOOLBOX + " echo " + Verylight + " > " + MINFREE_PATH);
             }
             mPreferences.edit().putString(PREF_MINFREE, Verylight).apply();
             values = Helpers.readOneLine(MINFREE_PATH).split(",");
@@ -239,7 +241,7 @@ public class OOMSettings extends PreferenceFragment
             if (Helpers.isSystemApp(getActivity())) {
                 Helpers.writeOneLine(MINFREE_PATH, Light);
             } else {
-                new CMDProcessor().su.runWaitFor("busybox echo " + Light + " > " + MINFREE_PATH);
+                new CMDProcessor().su.runWaitFor(TOOLBOX + " echo " + Light + " > " + MINFREE_PATH);
             }
             mPreferences.edit().putString(PREF_MINFREE, Light).apply();
             values = Helpers.readOneLine(MINFREE_PATH).split(",");
@@ -249,7 +251,7 @@ public class OOMSettings extends PreferenceFragment
             if (Helpers.isSystemApp(getActivity())) {
                 Helpers.writeOneLine(MINFREE_PATH, Medium);
             } else {
-                new CMDProcessor().su.runWaitFor("busybox echo " + Medium + " > " + MINFREE_PATH);
+                new CMDProcessor().su.runWaitFor(TOOLBOX + " echo " + Medium + " > " + MINFREE_PATH);
             }
             mPreferences.edit().putString(PREF_MINFREE, Medium).apply();
             values = Helpers.readOneLine(MINFREE_PATH).split(",");
@@ -260,7 +262,7 @@ public class OOMSettings extends PreferenceFragment
                 Helpers.writeOneLine(MINFREE_PATH, Aggressive);
             } else {
                 new CMDProcessor().su.runWaitFor(
-                        "busybox echo " + Aggressive + " > " + MINFREE_PATH);
+                        TOOLBOX + " echo " + Aggressive + " > " + MINFREE_PATH);
             }
             mPreferences.edit().putString(PREF_MINFREE, Aggressive).apply();
             values = Helpers.readOneLine(MINFREE_PATH).split(",");
@@ -271,7 +273,7 @@ public class OOMSettings extends PreferenceFragment
                 Helpers.writeOneLine(MINFREE_PATH, Veryaggressive);
             } else {
                 new CMDProcessor().su.runWaitFor(
-                        "busybox echo " + Veryaggressive + " > " + MINFREE_PATH);
+                        TOOLBOX + " echo " + Veryaggressive + " > " + MINFREE_PATH);
             }
             mPreferences.edit().putString(PREF_MINFREE, Veryaggressive).apply();
             values = Helpers.readOneLine(MINFREE_PATH).split(",");
@@ -282,13 +284,13 @@ public class OOMSettings extends PreferenceFragment
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(USER_PROC_PATH, "1");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 1 > " + USER_PROC_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 1 > " + USER_PROC_PATH);
                 }
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(USER_PROC_PATH, "0");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 0 > " + USER_PROC_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 0 > " + USER_PROC_PATH);
                 }
             }
             return true;
@@ -297,13 +299,13 @@ public class OOMSettings extends PreferenceFragment
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(SYS_PROC_PATH, "1");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 1 > " + SYS_PROC_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 1 > " + SYS_PROC_PATH);
                 }
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(SYS_PROC_PATH, "0");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 0 > " + SYS_PROC_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 0 > " + SYS_PROC_PATH);
                 }
             }
             return true;
@@ -330,13 +332,13 @@ public class OOMSettings extends PreferenceFragment
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(KSM_RUN_PATH, "1");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 1 > " + KSM_RUN_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 1 > " + KSM_RUN_PATH);
                 }
             } else {
                 if (Helpers.isSystemApp(getActivity())) {
                     Helpers.writeOneLine(KSM_RUN_PATH, "0");
                 } else {
-                    new CMDProcessor().su.runWaitFor("busybox echo 0 > " + KSM_RUN_PATH);
+                    new CMDProcessor().su.runWaitFor(TOOLBOX + " echo 0 > " + KSM_RUN_PATH);
                 }
             }
             return true;
@@ -455,7 +457,7 @@ public class OOMSettings extends PreferenceFragment
                             Helpers.writeOneLine(namespath,
                                     mPreferences.getString(key, Helpers.readOneLine(namespath)));
                         } else {
-                            new CMDProcessor().su.runWaitFor("busybox echo " +
+                            new CMDProcessor().su.runWaitFor(TOOLBOX + " echo " +
                                     mPreferences.getString(key,
                                             Helpers.readOneLine(namespath)) + " > " + namespath);
                         }
@@ -561,7 +563,7 @@ public class OOMSettings extends PreferenceFragment
                             Helpers.writeOneLine(path, implodeArray(values, ","));
                         } else {
                             new CMDProcessor().su.runWaitFor(
-                                    "busybox echo " + implodeArray(values, ",") + " > " + path);
+                                    TOOLBOX + " echo " + implodeArray(values, ",") + " > " + path);
                         }
                         final SharedPreferences.Editor editor = mPreferences.edit();
                         editor.putString(key, implodeArray(values, ","));
