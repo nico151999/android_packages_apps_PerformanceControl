@@ -32,7 +32,12 @@ elif [ "$arg" == "-govprop" ]; then
         echo "";
         exit;
     fi;
-    for f in $(busybox find /sys/devices/system/cpu/cpufreq/$gov/* -type f -prune -perm -644); do
+    if [ "X$3" == "X" ]; then
+        mod="644";
+    else
+        mod="$3";
+    fi;
+    for f in $(busybox find /sys/devices/system/cpu/cpufreq/$gov/* -type f -prune -perm -$mod); do
         v=$(busybox cat $f);
         if [ "X$r" == "X" ]; then
             r="$f:$v";
