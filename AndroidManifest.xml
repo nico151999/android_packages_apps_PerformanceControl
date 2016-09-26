@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.brewcrewfoo.performance"
-    android:versionCode="5"
-    android:versionName="2.1.5"
-    android:sharedUserId="android.uid.system">
+    android:versionCode="6"
+    android:versionName="2.1.6">
 
     <uses-sdk
-        android:minSdkVersion="21" />
+        android:minSdkVersion="18"
+        android:targetSdkVersion="21" />
 
     <original-package android:name="com.brewcrewfoo.performance" />
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -66,18 +66,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-
-	<receiver
-	    android:name="com.brewcrewfoo.performance.widget.PCWidget"
-	    android:label="Performance Control">
-	    <intent-filter>
-		<action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-		<action android:name="com.brewcrewfoo.performance.ACTION_FREQS_CHANGED"/>
-	    </intent-filter>
-	    <meta-data
-		android:name="android.appwidget.provider"
-		android:resource="@xml/widget_info"/>
-	</receiver>
 
         <service android:name="com.brewcrewfoo.performance.service.BootService" />
 
