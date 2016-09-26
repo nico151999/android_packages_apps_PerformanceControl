@@ -281,10 +281,12 @@ public class Tegra3 extends PreferenceFragment
 		}
 	    }
 	    else {
-		for (int i=0;i< MAX_VOLTAGE_PREF;i++) {
-		    Preference pref = mGpuVoltagePrefs.get(i);
-		    if (pref != null) {
+		if (mGpuVoltagePrefs != null) {
+		    for (int i=0;i< MAX_VOLTAGE_PREF;i++) {
+			Preference pref = mGpuVoltagePrefs.get(i);
+			if (pref != null) {
 			editor.remove(pref.getKey()).apply();
+			}
 		    }
 		}
 	    }
@@ -299,10 +301,12 @@ public class Tegra3 extends PreferenceFragment
 		}
 	    }
 	    else {
-		for (int i=0;i< MAX_VOLTAGE_PREF;i++) {
-		    Preference pref = mLpVoltagePrefs.get(i);
-		    if (pref != null) {
-			editor.remove(pref.getKey()).apply();
+		if (mLpVoltagePrefs != null) {
+		    for (int i=0;i< MAX_VOLTAGE_PREF;i++) {
+			Preference pref = mLpVoltagePrefs.get(i);
+			if (pref != null) {
+			    editor.remove(pref.getKey()).apply();
+			}
 		    }
 		}
 	    }
@@ -317,10 +321,12 @@ public class Tegra3 extends PreferenceFragment
 		}
 	    }
 	    else {
-		for (int i=0;i< MAX_VOLTAGE_PREF;i++) {
-		    Preference pref = mEmcVoltagePrefs.get(i);
-		    if (pref != null) {
-			editor.remove(pref.getKey()).apply();
+		if (mEmcVoltagePrefs != null) {
+		    for (int i=0;i< MAX_VOLTAGE_PREF;i++) {
+			Preference pref = mEmcVoltagePrefs.get(i);
+			if (pref != null) {
+			    editor.remove(pref.getKey()).apply();
+			}
 		    }
 		}
 	    }
@@ -635,5 +641,116 @@ public class Tegra3 extends PreferenceFragment
 	}
 	return volts;
     }
+/*
+    protected void grouperEditDialog(String title, final String currentValue, final String freq,
+			final Preference pref, final List<Voltage> volts, final String path) {
+	AlertDialog dialog = null;
+
+	final LayoutInflater factory = LayoutInflater.from(context);
+	final View voltageDialog = factory.inflate(R.layout.voltage_dialog, null);
+
+	final EditText voltageEdit = (EditText) voltageDialog.findViewById(R.id.voltageEdit);
+	final SeekBar voltageSeek = (SeekBar) voltageDialog.findViewById(R.id.voltageSeek);
+	final TextView voltageMeter = (TextView) voltageDialog.findViewById(R.id.voltageMeter);
+	final int[] STEPS = (freq == null) ? FREQ_STEPS : VOLT_STEPS;
+	final String unit = (freq == null) ? " MHz" : " mV";
+	final int currentVal = Integer.parseInt(currentValue);
+	voltageEdit.setText(currentValue);
+	voltageEdit.addTextChangedListener(new TextWatcher() {
+	    @Override
+	    public void afterTextChanged(Editable arg0) {
+	    }
+
+	    @Override
+	    public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+	    }
+
+	    @Override
+	    public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+		String text = voltageEdit.getText().toString();
+		int value = 0;
+		try {
+		    value = Integer.parseInt(text);
+		    if (value > STEPS[STEPS.length - 1]) {
+			value = STEPS[STEPS.length - 1];
+			text = String.valueOf(value);
+			voltageEdit.setText(text);
+		    }
+		} catch (NumberFormatException nfe) {
+		    return;
+		}
+		voltageMeter.setText(text + unit);
+		final int index = getNearestStepIndex(value, STEPS);
+		voltageSeek.setProgress(index);
+	    }
+
+	});
+
+	voltageMeter.setText(currentValue + unit);
+	voltageSeek.setMax(STEPS.length-1);
+	voltageSeek.setProgress(getNearestStepIndex(currentVal, STEPS));
+	voltageSeek
+		.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		    @Override
+		    public void onProgressChanged(SeekBar sb, int progress,
+						  boolean fromUser) {
+			if (fromUser) {
+			    final String volt = Integer.toString(STEPS[progress]);
+			    voltageMeter.setText(volt + unit);
+			    voltageEdit.setText(volt);
+			}
+		    }
+
+		    @Override
+		    public void onStartTrackingTouch(SeekBar seekBar) {
+			//
+		    }
+
+		    @Override
+		    public void onStopTrackingTouch(SeekBar seekBar) {
+			//
+		    }
+
+		});
+
+	dialog = new AlertDialog.Builder(context)
+		.setTitle(title)
+		.setView(voltageDialog)
+		.setPositiveButton(
+		    getResources().getString(R.string.ps_volt_save),
+		    new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			    dialog.cancel();
+			    final String value = voltageEdit.getText().toString();
+			    if (!value.equals(currentValue)) {	// do nothing if value no change
+				if (freq == null) {
+				// write Max Freq to sysfs
+				    mGpuMaxFreq = value;
+				    new CMDProcessor().su.runWaitFor(TOOLBOX+" echo "+value+" > "+path);
+				    pref.setSummary(value + "  MHz");
+				} else {
+				    setVoltages(volts, freq, value, path);
+				    pref.setTitle(freq + "MHz: " + value + " mV");
+				}
+				final SharedPreferences.Editor editor = mPreferences.edit();
+				editor.putString(pref.getKey(), value);
+				editor.commit();
+				if (DEBUG)
+				    Log.d(TAG,"putString:"+pref.getKey()+"="+value);
+			    }
+			}
+		    })
+		.setNegativeButton(getString(R.string.cancel),
+		    new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			    dialog.cancel();
+			}
+		    }).create();
+
+	if (dialog != null) {
+	    dialog.show();
+	}
+    }
+*/
 }
 
