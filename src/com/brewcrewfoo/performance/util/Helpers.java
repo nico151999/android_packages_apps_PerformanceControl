@@ -52,7 +52,7 @@ public class Helpers implements Constants {
      * @return If SU was granted or denied
      */
     public static boolean checkSu() {
-        if (!new File("/su/bin/su").exists && !new File("/system/bin/su").exists() && !new File("/system/xbin/su").exists()) {
+        if (!new File("/su/bin/su").exists() && !new File("/system/bin/su").exists() && !new File("/system/xbin/su").exists()) {
             Log.e(TAG, "su does not exist!!!");
             return false; // tell caller to bail...
         }
@@ -76,7 +76,7 @@ public class Helpers implements Constants {
      * @return If busybox exists
      */
     public static boolean checkBusybox() {
-        if (!new("/su/xbin/busybox").exists() && !new File("/system/bin/busybox").exists() && !new File("/system/xbin/busybox").exists()) {
+        if (!new File("/su/xbin/busybox").exists() && !new File("/system/bin/busybox").exists() && !new File("/system/xbin/busybox").exists()) {
             Log.e(TAG, "Busybox not in xbin or bin!");
             if (!new File("/system/bin/toybox").exists() && !new File("/system/xbin/toybox").exists()) {
 		Log.e(TAG, "Toybox not in xbin or bin!");
